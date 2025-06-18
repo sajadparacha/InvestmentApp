@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FileOutputStream;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
@@ -102,16 +103,158 @@ public class InvestmentCalculatorController {
     private class ExportCSVListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Implement CSV export
-            JOptionPane.showMessageDialog(view, "CSV Export functionality to be implemented");
+            if (model.getTableModel().getRowCount() == 0) {
+                JOptionPane.showMessageDialog(view, "Please calculate results first.");
+                return;
+            }
+
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Export to CSV");
+            fileChooser.setFileFilter(new FileNameExtensionFilter("CSV Files (*.csv)", "csv"));
+            fileChooser.setSelectedFile(new File("investment_calculator_results.csv"));
+
+            int result = fileChooser.showSaveDialog(view);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                if (!file.getName().toLowerCase().endsWith(".csv")) {
+                    file = new File(file.getAbsolutePath() + ".csv");
+                }
+
+                try (FileWriter writer = new FileWriter(file)) {
+                    // Write header
+                    writer.write("Investment Calculator Results\n");
+                    writer.write("Generated on: " + java.time.LocalDateTime.now() + "\n\n");
+                    
+                    // Write input parameters
+                    writer.write("Input Parameters:\n");
+                    writer.write("Investment Amount," + view.investmentField.getText() + "\n");
+                    writer.write("Monthly Profit %," + view.profitField.getText() + "\n");
+                    writer.write("Charity %," + view.charityField.getText() + "\n");
+                    writer.write("Number of Months," + view.monthsField.getText() + "\n\n");
+                    
+                    // Write summary
+                    writer.write("Summary:\n");
+                    writer.write("Total Profit," + decimalFormat.format(model.getTotalProfit()) + "\n");
+                    writer.write("Total Charity," + decimalFormat.format(model.getTotalCharity()) + "\n");
+                    writer.write("Final Amount," + decimalFormat.format(model.getFinalAmount()) + "\n\n");
+                    
+                    // Write table data
+                    writer.write("Monthly Breakdown:\n");
+                    writer.write("Month,Profit,Charity,Investment Value\n");
+                    
+                    for (int i = 0; i < model.getTableModel().getRowCount(); i++) {
+                        writer.write(model.getTableModel().getValueAt(i, 0) + "," +
+                                   model.getTableModel().getValueAt(i, 1) + "," +
+                                   model.getTableModel().getValueAt(i, 2) + "," +
+                                   model.getTableModel().getValueAt(i, 3) + "\n");
+                    }
+
+                    JOptionPane.showMessageDialog(view, 
+                        "CSV file exported successfully to:\n" + file.getAbsolutePath(),
+                        "Export Successful",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(view, 
+                        "Error exporting CSV: " + ex.getMessage(),
+                        "Export Error",
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
         }
     }
 
     private class ExportPDFListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Implement PDF export
-            JOptionPane.showMessageDialog(view, "PDF Export functionality to be implemented");
+            if (model.getTableModel().getRowCount() == 0) {
+                JOptionPane.showMessageDialog(view, "Please calculate results first.");
+                return;
+            }
+
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Export to PDF");
+            fileChooser.setFileFilter(new FileNameExtensionFilter("PDF Files (*.pdf)", "pdf"));
+            fileChooser.setSelectedFile(new File("investment_calculator_results.pdf"));
+
+            int result = fileChooser.showSaveDialog(view);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                if (!file.getName().toLowerCase().endsWith(".pdf")) {
+                    file = new File(file.getAbsolutePath() + ".pdf");
+                }
+
+                try {
+                    Document document = new Document();
+                    PdfWriter.getInstance(document, new FileOutputStream(file));
+                    document.open();
+
+                    // Add title
+                    com.itextpdf.text.Font titleFont = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 18, com.itextpdf.text.Font.BOLD);
+                    Paragraph title = new Paragraph("Investment Calculator Results", titleFont);
+                    title.setAlignment(Element.ALIGN_CENTER);
+                    document.add(title);
+                    document.add(new Paragraph(" ")); // Spacing
+
+                    // Add generation date
+                    com.itextpdf.text.Font dateFont = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 10, com.itextpdf.text.Font.ITALIC);
+                    Paragraph date = new Paragraph("Generated on: " + java.time.LocalDateTime.now(), dateFont);
+                    date.setAlignment(Element.ALIGN_CENTER);
+                    document.add(date);
+                    document.add(new Paragraph(" ")); // Spacing
+
+                    // Add input parameters
+                    com.itextpdf.text.Font sectionFont = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 14, com.itextpdf.text.Font.BOLD);
+                    document.add(new Paragraph("Input Parameters:", sectionFont));
+                    document.add(new Paragraph("Investment Amount: " + view.investmentField.getText()));
+                    document.add(new Paragraph("Monthly Profit %: " + view.profitField.getText()));
+                    document.add(new Paragraph("Charity %: " + view.charityField.getText()));
+                    document.add(new Paragraph("Number of Months: " + view.monthsField.getText()));
+                    document.add(new Paragraph(" ")); // Spacing
+
+                    // Add summary
+                    document.add(new Paragraph("Summary:", sectionFont));
+                    document.add(new Paragraph("Total Profit: SAR " + decimalFormat.format(model.getTotalProfit())));
+                    document.add(new Paragraph("Total Charity: SAR " + decimalFormat.format(model.getTotalCharity())));
+                    document.add(new Paragraph("Final Amount: SAR " + decimalFormat.format(model.getFinalAmount())));
+                    document.add(new Paragraph(" ")); // Spacing
+
+                    // Add table
+                    document.add(new Paragraph("Monthly Breakdown:", sectionFont));
+                    PdfPTable table = new PdfPTable(4);
+                    table.setWidthPercentage(100);
+
+                    // Add headers
+                    com.itextpdf.text.Font headerFont = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 12, com.itextpdf.text.Font.BOLD);
+                    table.addCell(new PdfPCell(new Phrase("Month", headerFont)));
+                    table.addCell(new PdfPCell(new Phrase("Profit", headerFont)));
+                    table.addCell(new PdfPCell(new Phrase("Charity", headerFont)));
+                    table.addCell(new PdfPCell(new Phrase("Investment Value", headerFont)));
+
+                    // Add data
+                    com.itextpdf.text.Font dataFont = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 10, com.itextpdf.text.Font.NORMAL);
+                    for (int i = 0; i < model.getTableModel().getRowCount(); i++) {
+                        table.addCell(new PdfPCell(new Phrase(model.getTableModel().getValueAt(i, 0).toString(), dataFont)));
+                        table.addCell(new PdfPCell(new Phrase(model.getTableModel().getValueAt(i, 1).toString(), dataFont)));
+                        table.addCell(new PdfPCell(new Phrase(model.getTableModel().getValueAt(i, 2).toString(), dataFont)));
+                        table.addCell(new PdfPCell(new Phrase(model.getTableModel().getValueAt(i, 3).toString(), dataFont)));
+                    }
+
+                    document.add(table);
+                    document.close();
+
+                    JOptionPane.showMessageDialog(view, 
+                        "PDF file exported successfully to:\n" + file.getAbsolutePath(),
+                        "Export Successful",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(view, 
+                        "Error exporting PDF: " + ex.getMessage(),
+                        "Export Error",
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
         }
     }
 
