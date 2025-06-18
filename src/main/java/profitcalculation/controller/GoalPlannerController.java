@@ -37,6 +37,8 @@ public class GoalPlannerController {
         view.exportCSVBtn.addActionListener(e -> exportCSV());
         view.exportPDFBtn.addActionListener(e -> exportPDF());
         view.chartBtn.addActionListener(e -> showChart());
+        view.helpBtn.addActionListener(e -> showHelp());
+        view.fillDefaultsBtn.addActionListener(e -> fillDefaultValues());
     }
 
     private void calculate(ActionEvent e) {
@@ -155,5 +157,15 @@ public class GoalPlannerController {
         chartFrame.setSize(850, 600);
         chartFrame.setLocationRelativeTo(null);
         chartFrame.setVisible(true);
+    }
+
+    private void showHelp() {
+        // Implementation of showHelp method
+    }
+
+    private void fillDefaultValues() {
+        view.goalProfitField.setText("1000");
+        view.monthlyInvestmentField.setText("5000");
+        view.monthlyRateField.setText("2.5");
     }
 }

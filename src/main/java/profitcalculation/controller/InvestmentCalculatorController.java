@@ -37,6 +37,8 @@ public class InvestmentCalculatorController {
         view.exportCSVBtn.addActionListener(e -> exportCSV());
         view.exportPDFBtn.addActionListener(e -> exportPDF());
         view.chartBtn.addActionListener(e -> showChart());
+        view.helpBtn.addActionListener(e -> showHelp());
+        view.fillDefaultsBtn.addActionListener(e -> fillDefaultValues());
     }
 
     private void calculate(ActionEvent e) {
@@ -154,5 +156,16 @@ public class InvestmentCalculatorController {
         chartFrame.setSize(850, 600);
         chartFrame.setLocationRelativeTo(null);
         chartFrame.setVisible(true);
+    }
+
+    private void fillDefaultValues() {
+        view.investmentField.setText("10000");
+        view.profitField.setText("2.5");
+        view.charityField.setText("10");
+        view.monthsField.setText("12");
+    }
+
+    private void showHelp() {
+        view.showHelpDialog();
     }
 }
