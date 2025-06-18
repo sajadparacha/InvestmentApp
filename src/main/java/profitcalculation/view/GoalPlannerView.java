@@ -27,6 +27,7 @@ public class GoalPlannerView extends JPanel {
     public JButton exportCSVBtn = createStyledButton("\uD83D\uDCC3 Export to CSV", PRIMARY_COLOR);
     public JButton exportPDFBtn = createStyledButton("\uD83D\uDCC5 Export to PDF", PRIMARY_COLOR);
     public JButton chartBtn = createStyledButton("\uD83D\uDCCA Show Chart", WARNING_COLOR);
+    public JButton explainChartBtn = createStyledButton("\uD83D\uDCD6 Explain Chart", PRIMARY_COLOR);
     public JButton helpBtn = createStyledButton("\u2753 Help", PRIMARY_COLOR);
     public JButton fillDefaultsBtn = createStyledButton("Fill Default Values", PRIMARY_COLOR);
 
@@ -61,7 +62,7 @@ public class GoalPlannerView extends JPanel {
             "Enter the expected monthly profit percentage");
 
         // Button Panel
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 3, 10, 10));
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 4, 10, 10));
         buttonPanel.setBackground(PANEL_COLOR);
         buttonPanel.add(calculateBtn);
         buttonPanel.add(clearBtn);
@@ -69,6 +70,7 @@ public class GoalPlannerView extends JPanel {
         buttonPanel.add(exportCSVBtn);
         buttonPanel.add(exportPDFBtn);
         buttonPanel.add(chartBtn);
+        buttonPanel.add(explainChartBtn);
         buttonPanel.add(fillDefaultsBtn);
 
         gbc.gridy = 3;
@@ -96,17 +98,25 @@ public class GoalPlannerView extends JPanel {
         investmentValueLabel.setFont(HEADER_FONT);
         lastProfitLabel.setFont(HEADER_FONT);
         
+        // Add icons to summary labels
+        monthsLabel.setText("<html><span style='font-size:16px'>📅</span> Months Required: " + (monthsLabel.getText().isEmpty() ? "0" : monthsLabel.getText().replace("Months Required: ", "")));
+        totalInvestmentLabel.setText("<html><span style='font-size:16px'>💵</span> Total Investment: SAR " + (totalInvestmentLabel.getText().isEmpty() ? "0.00" : totalInvestmentLabel.getText().replace("Total Investment: SAR ", "")));
+        investmentValueLabel.setText("<html><span style='font-size:16px'>📈</span> Final Investment Value: SAR " + (investmentValueLabel.getText().isEmpty() ? "0.00" : investmentValueLabel.getText().replace("Final Investment Value: SAR ", "")));
+        lastProfitLabel.setText("<html><span style='font-size:16px'>💎</span> Last Month's Profit: SAR " + (lastProfitLabel.getText().isEmpty() ? "0.00" : lastProfitLabel.getText().replace("Last Month's Profit: SAR ", "")));
+        
         summaryPanel.add(monthsLabel);
         summaryPanel.add(totalInvestmentLabel);
         summaryPanel.add(investmentValueLabel);
         summaryPanel.add(lastProfitLabel);
 
-        add(inputPanel, BorderLayout.NORTH);
-        add(tableScroll, BorderLayout.CENTER);
-        add(summaryPanel, BorderLayout.SOUTH);
+        // Create a content panel to hold all components
+        JPanel contentPanel = new JPanel(new BorderLayout(15, 15));
+        contentPanel.setBackground(BACKGROUND_COLOR);
+        contentPanel.add(inputPanel, BorderLayout.NORTH);
+        contentPanel.add(tableScroll, BorderLayout.CENTER);
+        contentPanel.add(summaryPanel, BorderLayout.SOUTH);
 
-        // Add help button action
-        helpBtn.addActionListener(e -> showHelpDialog());
+        add(contentPanel, BorderLayout.CENTER);
     }
 
     private JPanel createPanel(String title, boolean hasBorder) {
@@ -129,22 +139,7 @@ public class GoalPlannerView extends JPanel {
     private JButton createStyledButton(String text, Color color) {
         JButton button = new JButton(text);
         button.setFont(MAIN_FONT);
-        button.setBackground(color);
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Add hover effect
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(color.darker());
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(color);
-            }
-        });
-        
         return button;
     }
 
@@ -168,7 +163,7 @@ public class GoalPlannerView extends JPanel {
         panel.add(field, gbc);
     }
 
-    private void showHelpDialog() {
+    public void showHelpDialog() {
         JDialog helpDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Goal Planner Help", true);
         helpDialog.setLayout(new BorderLayout(15, 15));
         helpDialog.getContentPane().setBackground(BACKGROUND_COLOR);
@@ -217,5 +212,62 @@ public class GoalPlannerView extends JPanel {
         helpDialog.setSize(500, 500);
         helpDialog.setLocationRelativeTo(this);
         helpDialog.setVisible(true);
+    }
+
+    public void showExplainChartDialog() {
+        JDialog explainDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Chart Explanation", false);
+        explainDialog.setLayout(new BorderLayout(15, 15));
+        explainDialog.getContentPane().setBackground(BACKGROUND_COLOR);
+
+        JTextArea explanation = new JTextArea();
+        explanation.setEditable(false);
+        explanation.setBackground(PANEL_COLOR);
+        explanation.setFont(MAIN_FONT);
+        explanation.setLineWrap(true);
+        explanation.setWrapStyleWord(true);
+        explanation.setText(
+            "📊 Goal Planner Chart Explanation\n\n" +
+            "This line chart shows your journey towards your profit goal:\n\n" +
+            "🟣 PURPLE Line - Total Investment:\n" +
+            "   • Shows how much you've invested over time\n" +
+            "   • Grows steadily with your monthly investments\n" +
+            "   • Represents your actual cash contributions\n\n" +
+            "🔵 BLUE Line - Investment Value:\n" +
+            "   • Shows the total value of your investment\n" +
+            "   • Includes both your investments and profits\n" +
+            "   • Grows faster than total investment due to profits\n\n" +
+            "🟢 GREEN Line - Monthly Profit:\n" +
+            "   • Shows the profit earned each month\n" +
+            "   • Based on your current investment value\n" +
+            "   • The line you need to reach your target\n\n" +
+            "📈 What to Look For:\n" +
+            "• When the green line reaches your target profit\n" +
+            "• How the blue line grows faster than purple\n" +
+            "• The point where you achieve your goal\n\n" +
+            "💡 Tips:\n" +
+            "• Hover over lines to see exact values\n" +
+            "• The green line shows your progress towards the goal\n" +
+            "• Compare lines to understand your growth pattern"
+        );
+
+        JScrollPane scrollPane = new JScrollPane(explanation);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        explainDialog.add(scrollPane, BorderLayout.CENTER);
+
+        JButton closeButton = new JButton("Got it! 👍");
+        closeButton.setFont(MAIN_FONT);
+        closeButton.setBackground(PRIMARY_COLOR);
+        closeButton.setForeground(Color.WHITE);
+        closeButton.setFocusPainted(false);
+        closeButton.addActionListener(e -> explainDialog.dispose());
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(BACKGROUND_COLOR);
+        buttonPanel.add(closeButton);
+        explainDialog.add(buttonPanel, BorderLayout.SOUTH);
+
+        explainDialog.setSize(500, 500);
+        explainDialog.setLocationRelativeTo(this);
+        explainDialog.setVisible(true);
     }
 }

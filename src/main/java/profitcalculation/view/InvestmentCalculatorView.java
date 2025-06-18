@@ -28,6 +28,7 @@ public class InvestmentCalculatorView extends JPanel {
     public JButton exportCSVBtn = createStyledButton("\uD83D\uDCC3 Export to CSV", PRIMARY_COLOR);
     public JButton exportPDFBtn = createStyledButton("\uD83D\uDCC5 Export to PDF", PRIMARY_COLOR);
     public JButton chartBtn = createStyledButton("\uD83D\uDCCA Show Chart", WARNING_COLOR);
+    public JButton explainChartBtn = createStyledButton("\uD83D\uDCD6 Explain Chart", PRIMARY_COLOR);
     public JButton helpBtn = createStyledButton("\u2753 Help", PRIMARY_COLOR);
     public JButton fillDefaultsBtn = createStyledButton("Fill Default Values", PRIMARY_COLOR);
 
@@ -63,7 +64,7 @@ public class InvestmentCalculatorView extends JPanel {
             "Enter the investment duration in months");
 
         // Button Panel
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 3, 10, 10));
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 4, 10, 10));
         buttonPanel.setBackground(PANEL_COLOR);
         buttonPanel.add(calcBtn);
         buttonPanel.add(clearBtn);
@@ -71,6 +72,7 @@ public class InvestmentCalculatorView extends JPanel {
         buttonPanel.add(exportCSVBtn);
         buttonPanel.add(exportPDFBtn);
         buttonPanel.add(chartBtn);
+        buttonPanel.add(explainChartBtn);
         buttonPanel.add(fillDefaultsBtn);
 
         gbc.gridy = 4;
@@ -97,16 +99,23 @@ public class InvestmentCalculatorView extends JPanel {
         totalCharityLabel.setFont(HEADER_FONT);
         finalAmountLabel.setFont(HEADER_FONT);
         
+        // Add icons to summary labels
+        totalProfitLabel.setText("<html><span style='font-size:16px'>💰</span> Total Profit: SAR " + (totalProfitLabel.getText().isEmpty() ? "0.00" : totalProfitLabel.getText().replace("Total Profit: SAR ", "")));
+        totalCharityLabel.setText("<html><span style='font-size:16px'>❤️</span> Total Charity: SAR " + (totalCharityLabel.getText().isEmpty() ? "0.00" : totalCharityLabel.getText().replace("Total Charity: SAR ", "")));
+        finalAmountLabel.setText("<html><span style='font-size:16px'>🏦</span> Final Amount: SAR " + (finalAmountLabel.getText().isEmpty() ? "0.00" : finalAmountLabel.getText().replace("Final Amount: SAR ", "")));
+        
         summaryPanel.add(totalProfitLabel);
         summaryPanel.add(totalCharityLabel);
         summaryPanel.add(finalAmountLabel);
 
-        add(inputPanel, BorderLayout.NORTH);
-        add(tableScroll, BorderLayout.CENTER);
-        add(summaryPanel, BorderLayout.SOUTH);
+        // Create a content panel to hold all components
+        JPanel contentPanel = new JPanel(new BorderLayout(15, 15));
+        contentPanel.setBackground(BACKGROUND_COLOR);
+        contentPanel.add(inputPanel, BorderLayout.NORTH);
+        contentPanel.add(tableScroll, BorderLayout.CENTER);
+        contentPanel.add(summaryPanel, BorderLayout.SOUTH);
 
-        // Add help button action
-        helpBtn.addActionListener(e -> showHelpDialog());
+        add(contentPanel, BorderLayout.CENTER);
     }
 
     private JPanel createPanel(String title, boolean hasBorder) {
@@ -129,22 +138,7 @@ public class InvestmentCalculatorView extends JPanel {
     private JButton createStyledButton(String text, Color color) {
         JButton button = new JButton(text);
         button.setFont(MAIN_FONT);
-        button.setBackground(color);
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Add hover effect
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(color.darker());
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(color);
-            }
-        });
-        
         return button;
     }
 
@@ -221,5 +215,63 @@ public class InvestmentCalculatorView extends JPanel {
         helpDialog.setSize(500, 500);
         helpDialog.setLocationRelativeTo(this);
         helpDialog.setVisible(true);
+    }
+
+    public void showExplainChartDialog() {
+        JDialog explainDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Chart Explanation", false);
+        explainDialog.setLayout(new BorderLayout(15, 15));
+        explainDialog.getContentPane().setBackground(BACKGROUND_COLOR);
+
+        JTextArea explanation = new JTextArea();
+        explanation.setEditable(false);
+        explanation.setBackground(PANEL_COLOR);
+        explanation.setFont(MAIN_FONT);
+        explanation.setLineWrap(true);
+        explanation.setWrapStyleWord(true);
+        explanation.setText(
+            "📊 Investment Calculator Chart Explanation\n\n" +
+            "This stacked bar chart shows the monthly breakdown of your investment:\n\n" +
+            "🔵 BLUE (Bottom) - Investment Value:\n" +
+            "   • Your base investment amount for each month\n" +
+            "   • This is the foundation of your investment\n" +
+            "   • Grows as you add profits to your investment\n\n" +
+            "🟢 GREEN (Middle) - Net Profit:\n" +
+            "   • The profit you keep after charity deductions\n" +
+            "   • This is added to your investment value\n" +
+            "   • Shows your actual earnings\n\n" +
+            "🔴 RED (Top) - Charity:\n" +
+            "   • The amount donated to charity each month\n" +
+            "   • Deducted from your monthly profit\n" +
+            "   • Shows your charitable contributions\n\n" +
+            "📈 What to Look For:\n" +
+            "• Total bar height = Total investment value\n" +
+            "• Growing bars = Your investment is growing\n" +
+            "• Green section = Your net earnings\n" +
+            "• Red section = Your charitable impact\n\n" +
+            "💡 Tips:\n" +
+            "• Hover over bars to see exact values\n" +
+            "• Compare months to see growth trends\n" +
+            "• The chart shows your complete financial picture"
+        );
+
+        JScrollPane scrollPane = new JScrollPane(explanation);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        explainDialog.add(scrollPane, BorderLayout.CENTER);
+
+        JButton closeButton = new JButton("Got it! 👍");
+        closeButton.setFont(MAIN_FONT);
+        closeButton.setBackground(PRIMARY_COLOR);
+        closeButton.setForeground(Color.WHITE);
+        closeButton.setFocusPainted(false);
+        closeButton.addActionListener(e -> explainDialog.dispose());
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(BACKGROUND_COLOR);
+        buttonPanel.add(closeButton);
+        explainDialog.add(buttonPanel, BorderLayout.SOUTH);
+
+        explainDialog.setSize(500, 500);
+        explainDialog.setLocationRelativeTo(this);
+        explainDialog.setVisible(true);
     }
 }

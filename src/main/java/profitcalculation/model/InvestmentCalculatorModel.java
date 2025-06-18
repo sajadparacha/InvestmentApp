@@ -16,16 +16,25 @@ public class InvestmentCalculatorModel {
         charityPercent = charityPct;
         months = numMonths;
         tableModel.setRowCount(0);
-        totalProfit = totalCharity = 0;
+        totalProfit = 0;
+        totalCharity = 0;
         double amount = investment;
+        
         for (int i = 1; i <= numMonths; i++) {
             double profit = amount * profitPct / 100;
             double charity = profit * charityPct / 100;
             double netProfit = profit - charity;
+            
+            totalProfit += profit;  // Track total profit before charity
             totalCharity += charity;
-            totalProfit += netProfit;
             amount += netProfit;
-            tableModel.addRow(new Object[]{i, f(profit), f(charity), f(amount)});
+            
+            tableModel.addRow(new Object[]{
+                i,
+                f(profit),
+                f(charity),
+                f(amount)
+            });
         }
         finalAmount = amount;
         return true;
@@ -36,4 +45,11 @@ public class InvestmentCalculatorModel {
     public double getTotalCharity() { return totalCharity; }
     public double getFinalAmount() { return finalAmount; }
     private static String f(double n) { return new DecimalFormat("0.00").format(n); }
+
+    public void clear() {
+        tableModel.setRowCount(0);
+        totalProfit = 0;
+        totalCharity = 0;
+        finalAmount = 0;
+    }
 }

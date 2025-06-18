@@ -9,6 +9,7 @@ import profitcalculation.view.InvestmentCalculatorView;
 import profitcalculation.view.GoalPlannerView;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class MainApp {
     public static void main(String[] args) {
@@ -19,7 +20,7 @@ public class MainApp {
         }
 
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Investment Calculator");
+            JFrame frame = new JFrame("Investment Management System");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(1200, 800);
             frame.setLocationRelativeTo(null);
@@ -40,6 +41,12 @@ public class MainApp {
             JTabbedPane tabbedPane = new JTabbedPane();
             tabbedPane.addTab("Investment Calculator", calculatorView);
             tabbedPane.addTab("Goal Planner", goalPlannerView);
+
+            // Set tab icons and tooltips
+            tabbedPane.setIconAt(0, new ImageIcon("src/main/resources/calculator.png"));
+            tabbedPane.setIconAt(1, new ImageIcon("src/main/resources/goal.png"));
+            tabbedPane.setToolTipTextAt(0, "Calculate investment returns and charity amounts");
+            tabbedPane.setToolTipTextAt(1, "Plan your investment goals and track progress");
 
             frame.add(tabbedPane);
             frame.setVisible(true);
