@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import javax.swing.border.*;
+import profitcalculation.util.PropertyLoader;
 
 public class GoalPlannerView extends JPanel {
     // Modern color scheme
@@ -18,18 +19,25 @@ public class GoalPlannerView extends JPanel {
     private static final Font HEADER_FONT = new Font("Segoe UI", Font.BOLD, 16);
     private static final Font TITLE_FONT = new Font("Segoe UI", Font.BOLD, 18);
 
-    public JTextField goalProfitField = new JTextField("6000", 12);
-    public JTextField monthlyInvestmentField = new JTextField("2000", 12);
-    public JTextField monthlyRateField = new JTextField("2", 12);
+    // Load default values from properties file
+    private static final String TARGET_PROFIT_DEFAULT = PropertyLoader.getProperty("goal_planner.properties", "target.monthly.profit", "6000");
+    private static final String MONTHLY_INVESTMENT_DEFAULT = PropertyLoader.getProperty("goal_planner.properties", "monthly.investment", "2000");
+    private static final String MONTHLY_RATE_DEFAULT = PropertyLoader.getProperty("goal_planner.properties", "monthly.profit.rate", "2");
+    private static final String CHARITY_RATE_DEFAULT = PropertyLoader.getProperty("goal_planner.properties", "charity.rate", "10");
 
-    public JButton calculateBtn = createStyledButton("\uD83D\uDD0D Calculate", SUCCESS_COLOR);
-    public JButton clearBtn = createStyledButton("\u274C Clear", DANGER_COLOR);
-    public JButton exportCSVBtn = createStyledButton("\uD83D\uDCC3 Export to CSV", PRIMARY_COLOR);
-    public JButton exportPDFBtn = createStyledButton("\uD83D\uDCC5 Export to PDF", PRIMARY_COLOR);
-    public JButton chartBtn = createStyledButton("\uD83D\uDCCA Show Chart", WARNING_COLOR);
-    public JButton explainChartBtn = createStyledButton("\uD83D\uDCD6 Explain Chart", PRIMARY_COLOR);
-    public JButton helpBtn = createStyledButton("\u2753 Help", PRIMARY_COLOR);
-    public JButton fillDefaultsBtn = createStyledButton("Fill Default Values", PRIMARY_COLOR);
+    public JTextField goalProfitField = new JTextField(TARGET_PROFIT_DEFAULT, 12);
+    public JTextField monthlyInvestmentField = new JTextField(MONTHLY_INVESTMENT_DEFAULT, 12);
+    public JTextField monthlyRateField = new JTextField(MONTHLY_RATE_DEFAULT, 12);
+    public JTextField charityField = new JTextField(CHARITY_RATE_DEFAULT, 12);
+
+    public JButton calculateBtn = createStyledButton(PropertyLoader.getProperty("goal_planner.properties", "calculate.button", "🔍 Calculate"), SUCCESS_COLOR);
+    public JButton clearBtn = createStyledButton(PropertyLoader.getProperty("goal_planner.properties", "clear.button", "❌ Clear"), DANGER_COLOR);
+    public JButton exportCSVBtn = createStyledButton(PropertyLoader.getProperty("goal_planner.properties", "export.csv.button", "📃 Export to CSV"), PRIMARY_COLOR);
+    public JButton exportPDFBtn = createStyledButton(PropertyLoader.getProperty("goal_planner.properties", "export.pdf.button", "📄 Export to PDF"), PRIMARY_COLOR);
+    public JButton chartBtn = createStyledButton(PropertyLoader.getProperty("goal_planner.properties", "show.chart.button", "📊 Show Chart"), WARNING_COLOR);
+    public JButton explainChartBtn = createStyledButton(PropertyLoader.getProperty("goal_planner.properties", "explain.chart.button", "📖 Explain Chart"), PRIMARY_COLOR);
+    public JButton helpBtn = createStyledButton(PropertyLoader.getProperty("goal_planner.properties", "help.button", "❓ Help"), PRIMARY_COLOR);
+    public JButton fillDefaultsBtn = createStyledButton(PropertyLoader.getProperty("goal_planner.properties", "fill.defaults.button", "Fill Default Values"), PRIMARY_COLOR);
 
     public JLabel monthsLabel = new JLabel();
     public JLabel totalInvestmentLabel = new JLabel();
@@ -43,7 +51,7 @@ public class GoalPlannerView extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         // Inputs Panel
-        JPanel inputPanel = createPanel("Goal Planner", true);
+        JPanel inputPanel = createPanel(PropertyLoader.getProperty("goal_planner.properties", "panel.title", "Goal Planner"), true);
         inputPanel.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -54,12 +62,22 @@ public class GoalPlannerView extends JPanel {
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.WEST;
-        addRow(inputPanel, gbc, 0, "\uD83D\uDCB0 Target Monthly Profit (SAR):", goalProfitField,
-            "Enter your target monthly profit amount");
-        addRow(inputPanel, gbc, 1, "\uD83D\uDCB5 Monthly Investment (SAR):", monthlyInvestmentField,
-            "Enter how much you can invest monthly");
-        addRow(inputPanel, gbc, 2, "\uD83D\uDCC8 Monthly Profit Rate (%):", monthlyRateField,
-            "Enter the expected monthly profit percentage");
+        addRow(inputPanel, gbc, 0, 
+            PropertyLoader.getProperty("goal_planner.properties", "target.monthly.profit.label", "💰 Target Monthly Profit (SAR):"), 
+            goalProfitField,
+            PropertyLoader.getProperty("goal_planner.properties", "target.monthly.profit.tooltip", "Enter your target monthly profit amount"));
+        addRow(inputPanel, gbc, 1, 
+            PropertyLoader.getProperty("goal_planner.properties", "monthly.investment.label", "💵 Monthly Investment (SAR):"), 
+            monthlyInvestmentField,
+            PropertyLoader.getProperty("goal_planner.properties", "monthly.investment.tooltip", "Enter how much you can invest monthly"));
+        addRow(inputPanel, gbc, 2, 
+            PropertyLoader.getProperty("goal_planner.properties", "monthly.profit.rate.label", "📈 Monthly Profit Rate (%):"), 
+            monthlyRateField,
+            PropertyLoader.getProperty("goal_planner.properties", "monthly.profit.rate.tooltip", "Enter the expected monthly profit percentage"));
+        addRow(inputPanel, gbc, 3, 
+            PropertyLoader.getProperty("goal_planner.properties", "charity.rate.label", "❤️ Charity Rate %:"), 
+            charityField,
+            PropertyLoader.getProperty("goal_planner.properties", "charity.rate.tooltip", "Enter the percentage of profit to be donated to charity"));
 
         // Button Panel
         JPanel buttonPanel = new JPanel(new GridLayout(2, 4, 10, 10));
@@ -73,7 +91,7 @@ public class GoalPlannerView extends JPanel {
         buttonPanel.add(explainChartBtn);
         buttonPanel.add(fillDefaultsBtn);
 
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
         inputPanel.add(buttonPanel, gbc);
@@ -87,10 +105,10 @@ public class GoalPlannerView extends JPanel {
         resultTable.getTableHeader().setForeground(Color.WHITE);
 
         JScrollPane tableScroll = new JScrollPane(resultTable);
-        tableScroll.setBorder(createTitledBorder("Monthly Breakdown"));
+        tableScroll.setBorder(createTitledBorder(PropertyLoader.getProperty("goal_planner.properties", "monthly.breakdown.title", "Monthly Breakdown")));
         tableScroll.getViewport().setBackground(PANEL_COLOR);
 
-        JPanel summaryPanel = createPanel("Summary", false);
+        JPanel summaryPanel = createPanel(PropertyLoader.getProperty("goal_planner.properties", "summary.title", "Summary"), false);
         summaryPanel.setLayout(new GridLayout(4, 1, 10, 10));
         
         monthsLabel.setFont(HEADER_FONT);
@@ -99,10 +117,18 @@ public class GoalPlannerView extends JPanel {
         lastProfitLabel.setFont(HEADER_FONT);
         
         // Add icons to summary labels
-        monthsLabel.setText("<html><span style='font-size:16px'>📅</span> Months Required: " + (monthsLabel.getText().isEmpty() ? "0" : monthsLabel.getText().replace("Months Required: ", "")));
-        totalInvestmentLabel.setText("<html><span style='font-size:16px'>💵</span> Total Investment: SAR " + (totalInvestmentLabel.getText().isEmpty() ? "0.00" : totalInvestmentLabel.getText().replace("Total Investment: SAR ", "")));
-        investmentValueLabel.setText("<html><span style='font-size:16px'>📈</span> Final Investment Value: SAR " + (investmentValueLabel.getText().isEmpty() ? "0.00" : investmentValueLabel.getText().replace("Final Investment Value: SAR ", "")));
-        lastProfitLabel.setText("<html><span style='font-size:16px'>💎</span> Last Month's Profit: SAR " + (lastProfitLabel.getText().isEmpty() ? "0.00" : lastProfitLabel.getText().replace("Last Month's Profit: SAR ", "")));
+        monthsLabel.setText("<html><span style='font-size:16px'>📅</span> " + 
+            PropertyLoader.getProperty("goal_planner.properties", "months.required.label", "Months Required: ") + 
+            (monthsLabel.getText().isEmpty() ? "0" : monthsLabel.getText().replace("Months Required: ", "")));
+        totalInvestmentLabel.setText("<html><span style='font-size:16px'>💵</span> " + 
+            PropertyLoader.getProperty("goal_planner.properties", "total.investment.label", "Total Investment: SAR ") + 
+            (totalInvestmentLabel.getText().isEmpty() ? "0.00" : totalInvestmentLabel.getText().replace("Total Investment: SAR ", "")));
+        investmentValueLabel.setText("<html><span style='font-size:16px'>📈</span> " + 
+            PropertyLoader.getProperty("goal_planner.properties", "final.investment.value.label", "Final Investment Value: SAR ") + 
+            (investmentValueLabel.getText().isEmpty() ? "0.00" : investmentValueLabel.getText().replace("Final Investment Value: SAR ", "")));
+        lastProfitLabel.setText("<html><span style='font-size:16px'>💎</span> " + 
+            PropertyLoader.getProperty("goal_planner.properties", "last.month.profit.label", "Last Month's Profit: SAR ") + 
+            (lastProfitLabel.getText().isEmpty() ? "0.00" : lastProfitLabel.getText().replace("Last Month's Profit: SAR ", "")));
         
         summaryPanel.add(monthsLabel);
         summaryPanel.add(totalInvestmentLabel);
@@ -164,7 +190,8 @@ public class GoalPlannerView extends JPanel {
     }
 
     public void showHelpDialog() {
-        JDialog helpDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Goal Planner Help", true);
+        JDialog helpDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), 
+            PropertyLoader.getProperty("goal_planner.properties", "help.dialog.title", "Goal Planner Help"), true);
         helpDialog.setLayout(new BorderLayout(15, 15));
         helpDialog.getContentPane().setBackground(BACKGROUND_COLOR);
 
@@ -174,33 +201,15 @@ public class GoalPlannerView extends JPanel {
         description.setFont(MAIN_FONT);
         description.setLineWrap(true);
         description.setWrapStyleWord(true);
-        description.setText(
-            "Welcome to the Goal Planner! 🎯\n\n" +
-            "This tool helps you figure out how long it will take to reach your profit goal.\n\n" +
-            "Just tell us:\n\n" +
-            "1️⃣ Target Monthly Profit\n" +
-            "   How much money you want to earn each month\n\n" +
-            "2️⃣ Monthly Investment\n" +
-            "   How much you can invest every month\n\n" +
-            "3️⃣ Monthly Profit Rate\n" +
-            "   How much profit you expect to earn each month\n\n" +
-            "After clicking Calculate, you'll see:\n" +
-            "✓ How many months until you reach your goal\n" +
-            "✓ Total amount you'll need to invest\n" +
-            "✓ Your final investment value\n" +
-            "✓ Your last month's profit\n\n" +
-            "Want to save your plan?\n" +
-            "→ Click 'Export to CSV' to save as a spreadsheet\n" +
-            "→ Click 'Export to PDF' to save as a document\n" +
-            "→ Click 'Show Chart' to see your progress visually"
-        );
+        description.setText(PropertyLoader.getProperty("goal_planner.properties", "help.content", 
+            "Welcome to the Goal Planner! 🎯\n\nThis tool helps you figure out how long it will take to reach your profit goal."));
         description.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         JScrollPane scrollPane = new JScrollPane(description);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         helpDialog.add(scrollPane, BorderLayout.CENTER);
 
-        JButton closeButton = createStyledButton("Got it! 👍", PRIMARY_COLOR);
+        JButton closeButton = createStyledButton(PropertyLoader.getProperty("goal_planner.properties", "help.close.button", "Got it! 👍"), PRIMARY_COLOR);
         closeButton.addActionListener(e -> helpDialog.dispose());
         
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -215,7 +224,8 @@ public class GoalPlannerView extends JPanel {
     }
 
     public void showExplainChartDialog() {
-        JDialog explainDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Chart Explanation", false);
+        JDialog explainDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), 
+            PropertyLoader.getProperty("goal_planner.properties", "chart.explanation.dialog.title", "Chart Explanation"), false);
         explainDialog.setLayout(new BorderLayout(15, 15));
         explainDialog.getContentPane().setBackground(BACKGROUND_COLOR);
 
@@ -225,36 +235,14 @@ public class GoalPlannerView extends JPanel {
         explanation.setFont(MAIN_FONT);
         explanation.setLineWrap(true);
         explanation.setWrapStyleWord(true);
-        explanation.setText(
-            "📊 Goal Planner Chart Explanation\n\n" +
-            "This line chart shows your journey towards your profit goal:\n\n" +
-            "🟣 PURPLE Line - Total Investment:\n" +
-            "   • Shows how much you've invested over time\n" +
-            "   • Grows steadily with your monthly investments\n" +
-            "   • Represents your actual cash contributions\n\n" +
-            "🔵 BLUE Line - Investment Value:\n" +
-            "   • Shows the total value of your investment\n" +
-            "   • Includes both your investments and profits\n" +
-            "   • Grows faster than total investment due to profits\n\n" +
-            "🟢 GREEN Line - Monthly Profit:\n" +
-            "   • Shows the profit earned each month\n" +
-            "   • Based on your current investment value\n" +
-            "   • The line you need to reach your target\n\n" +
-            "📈 What to Look For:\n" +
-            "• When the green line reaches your target profit\n" +
-            "• How the blue line grows faster than purple\n" +
-            "• The point where you achieve your goal\n\n" +
-            "💡 Tips:\n" +
-            "• Hover over lines to see exact values\n" +
-            "• The green line shows your progress towards the goal\n" +
-            "• Compare lines to understand your growth pattern"
-        );
+        explanation.setText(PropertyLoader.getProperty("goal_planner.properties", "chart.explanation.content", 
+            "📊 Goal Planner Chart Explanation\n\nThis line chart shows your journey towards your profit goal."));
 
         JScrollPane scrollPane = new JScrollPane(explanation);
         scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         explainDialog.add(scrollPane, BorderLayout.CENTER);
 
-        JButton closeButton = new JButton("Got it! 👍");
+        JButton closeButton = new JButton(PropertyLoader.getProperty("goal_planner.properties", "chart.explanation.close.button", "Got it! 👍"));
         closeButton.setFont(MAIN_FONT);
         closeButton.setBackground(PRIMARY_COLOR);
         closeButton.setForeground(Color.WHITE);

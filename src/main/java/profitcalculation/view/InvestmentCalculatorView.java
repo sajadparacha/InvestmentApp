@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import javax.swing.border.*;
+import profitcalculation.util.PropertyLoader;
 
 public class InvestmentCalculatorView extends JPanel {
     // Modern color scheme
@@ -18,23 +19,30 @@ public class InvestmentCalculatorView extends JPanel {
     private static final Font HEADER_FONT = new Font("Segoe UI", Font.BOLD, 16);
     private static final Font TITLE_FONT = new Font("Segoe UI", Font.BOLD, 18);
 
-    public JTextField investmentField = new JTextField("3800000", 12);
-    public JTextField profitField = new JTextField("2", 12);
-    public JTextField charityField = new JTextField("15", 12);
-    public JTextField monthsField = new JTextField("48", 12);
+    // Load default values from properties file
+    private static final String INVESTMENT_AMOUNT_DEFAULT = PropertyLoader.getProperty("investment_calculator.properties", "investment.amount", "3800000");
+    private static final String MONTHLY_PROFIT_RATE_DEFAULT = PropertyLoader.getProperty("investment_calculator.properties", "monthly.profit.rate", "2");
+    private static final String CHARITY_RATE_DEFAULT = PropertyLoader.getProperty("investment_calculator.properties", "charity.rate", "15");
+    private static final String NUMBER_OF_MONTHS_DEFAULT = PropertyLoader.getProperty("investment_calculator.properties", "number.of.months", "48");
 
-    public JButton calcBtn = createStyledButton("\uD83D\uDD0D Calculate", SUCCESS_COLOR);
-    public JButton clearBtn = createStyledButton("\u274C Clear", DANGER_COLOR);
-    public JButton exportCSVBtn = createStyledButton("\uD83D\uDCC3 Export to CSV", PRIMARY_COLOR);
-    public JButton exportPDFBtn = createStyledButton("\uD83D\uDCC5 Export to PDF", PRIMARY_COLOR);
-    public JButton chartBtn = createStyledButton("\uD83D\uDCCA Show Chart", WARNING_COLOR);
-    public JButton explainChartBtn = createStyledButton("\uD83D\uDCD6 Explain Chart", PRIMARY_COLOR);
-    public JButton helpBtn = createStyledButton("\u2753 Help", PRIMARY_COLOR);
-    public JButton fillDefaultsBtn = createStyledButton("Fill Default Values", PRIMARY_COLOR);
+    public JTextField investmentField = new JTextField(INVESTMENT_AMOUNT_DEFAULT, 12);
+    public JTextField profitField = new JTextField(MONTHLY_PROFIT_RATE_DEFAULT, 12);
+    public JTextField charityField = new JTextField(CHARITY_RATE_DEFAULT, 12);
+    public JTextField monthsField = new JTextField(NUMBER_OF_MONTHS_DEFAULT, 12);
+
+    public JButton calcBtn = createStyledButton(PropertyLoader.getProperty("investment_calculator.properties", "calculate.button", "🔍 Calculate"), SUCCESS_COLOR);
+    public JButton clearBtn = createStyledButton(PropertyLoader.getProperty("investment_calculator.properties", "clear.button", "❌ Clear"), DANGER_COLOR);
+    public JButton exportCSVBtn = createStyledButton(PropertyLoader.getProperty("investment_calculator.properties", "export.csv.button", "📃 Export to CSV"), PRIMARY_COLOR);
+    public JButton exportPDFBtn = createStyledButton(PropertyLoader.getProperty("investment_calculator.properties", "export.pdf.button", "📄 Export to PDF"), PRIMARY_COLOR);
+    public JButton chartBtn = createStyledButton(PropertyLoader.getProperty("investment_calculator.properties", "show.chart.button", "📊 Show Chart"), WARNING_COLOR);
+    public JButton explainChartBtn = createStyledButton(PropertyLoader.getProperty("investment_calculator.properties", "explain.chart.button", "📖 Explain Chart"), PRIMARY_COLOR);
+    public JButton helpBtn = createStyledButton(PropertyLoader.getProperty("investment_calculator.properties", "help.button", "❓ Help"), PRIMARY_COLOR);
+    public JButton fillDefaultsBtn = createStyledButton(PropertyLoader.getProperty("investment_calculator.properties", "fill.defaults.button", "Fill Default Values"), PRIMARY_COLOR);
 
     public JLabel totalProfitLabel = new JLabel();
     public JLabel totalCharityLabel = new JLabel();
     public JLabel finalAmountLabel = new JLabel();
+    public JLabel totalMonthsLabel = new JLabel();
     public JTable resultTable;
 
     public InvestmentCalculatorView(DefaultTableModel tableModel) {
@@ -43,7 +51,7 @@ public class InvestmentCalculatorView extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         // Inputs Panel
-        JPanel inputPanel = createPanel("Investment Calculator", true);
+        JPanel inputPanel = createPanel(PropertyLoader.getProperty("investment_calculator.properties", "panel.title", "Investment Calculator"), true);
         inputPanel.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -54,14 +62,22 @@ public class InvestmentCalculatorView extends JPanel {
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.WEST;
-        addRow(inputPanel, gbc, 0, "\uD83D\uDCB0 Investment Amount:", investmentField, 
-            "Enter the total investment amount");
-        addRow(inputPanel, gbc, 1, "\uD83D\uDCC8 Monthly Profit %:", profitField, 
-            "Enter the expected monthly profit percentage");
-        addRow(inputPanel, gbc, 2, "\u2764\uFE0F Charity % of Profit:", charityField, 
-            "Enter the percentage of profit to be donated to charity");
-        addRow(inputPanel, gbc, 3, "\uD83D\uDCC6 Number of Months:", monthsField, 
-            "Enter the investment duration in months");
+        addRow(inputPanel, gbc, 0, 
+            PropertyLoader.getProperty("investment_calculator.properties", "investment.amount.label", "💰 Investment Amount:"), 
+            investmentField, 
+            PropertyLoader.getProperty("investment_calculator.properties", "investment.amount.tooltip", "Enter the total investment amount"));
+        addRow(inputPanel, gbc, 1, 
+            PropertyLoader.getProperty("investment_calculator.properties", "monthly.profit.rate.label", "📈 Monthly Profit %:"), 
+            profitField, 
+            PropertyLoader.getProperty("investment_calculator.properties", "monthly.profit.rate.tooltip", "Enter the expected monthly profit percentage"));
+        addRow(inputPanel, gbc, 2, 
+            PropertyLoader.getProperty("investment_calculator.properties", "charity.rate.label", "❤️ Charity % of Profit:"), 
+            charityField, 
+            PropertyLoader.getProperty("investment_calculator.properties", "charity.rate.tooltip", "Enter the percentage of profit to be donated to charity"));
+        addRow(inputPanel, gbc, 3, 
+            PropertyLoader.getProperty("investment_calculator.properties", "number.of.months.label", "📅 Number of Months:"), 
+            monthsField, 
+            PropertyLoader.getProperty("investment_calculator.properties", "number.of.months.tooltip", "Enter the investment duration in months"));
 
         // Button Panel
         JPanel buttonPanel = new JPanel(new GridLayout(2, 4, 10, 10));
@@ -89,21 +105,33 @@ public class InvestmentCalculatorView extends JPanel {
         resultTable.getTableHeader().setForeground(Color.WHITE);
 
         JScrollPane tableScroll = new JScrollPane(resultTable);
-        tableScroll.setBorder(createTitledBorder("Monthly Breakdown"));
+        tableScroll.setBorder(createTitledBorder(PropertyLoader.getProperty("investment_calculator.properties", "monthly.breakdown.title", "Monthly Breakdown")));
         tableScroll.getViewport().setBackground(PANEL_COLOR);
 
-        JPanel summaryPanel = createPanel("Summary", false);
-        summaryPanel.setLayout(new GridLayout(3, 1, 10, 10));
+        JPanel summaryPanel = createPanel(PropertyLoader.getProperty("investment_calculator.properties", "summary.title", "Summary"), false);
+        summaryPanel.setLayout(new GridLayout(4, 1, 10, 10));
         
         totalProfitLabel.setFont(HEADER_FONT);
         totalCharityLabel.setFont(HEADER_FONT);
         finalAmountLabel.setFont(HEADER_FONT);
+        totalMonthsLabel.setFont(HEADER_FONT);
         
         // Add icons to summary labels
-        totalProfitLabel.setText("<html><span style='font-size:16px'>💰</span> Total Profit: SAR " + (totalProfitLabel.getText().isEmpty() ? "0.00" : totalProfitLabel.getText().replace("Total Profit: SAR ", "")));
-        totalCharityLabel.setText("<html><span style='font-size:16px'>❤️</span> Total Charity: SAR " + (totalCharityLabel.getText().isEmpty() ? "0.00" : totalCharityLabel.getText().replace("Total Charity: SAR ", "")));
-        finalAmountLabel.setText("<html><span style='font-size:16px'>🏦</span> Final Amount: SAR " + (finalAmountLabel.getText().isEmpty() ? "0.00" : finalAmountLabel.getText().replace("Final Amount: SAR ", "")));
+        totalMonthsLabel.setText("<html><span style='font-size:16px'>📅</span> " + 
+            PropertyLoader.getProperty("investment_calculator.properties", "months.required.label", "Months Required: ") + 
+            (totalMonthsLabel.getText().isEmpty() ? "0" : totalMonthsLabel.getText().replace("Months Required: ", "")));
+
+        totalProfitLabel.setText("<html><span style='font-size:16px'>💰</span> " + 
+            PropertyLoader.getProperty("investment_calculator.properties", "total.profit.label", "Total Profit: SAR ") + 
+            (totalProfitLabel.getText().isEmpty() ? "0.00" : totalProfitLabel.getText().replace("Total Profit: SAR ", "")));
+        totalCharityLabel.setText("<html><span style='font-size:16px'>❤️</span> " + 
+            PropertyLoader.getProperty("investment_calculator.properties", "total.charity.label", "Total Charity: SAR ") + 
+            (totalCharityLabel.getText().isEmpty() ? "0.00" : totalCharityLabel.getText().replace("Total Charity: SAR ", "")));
+        finalAmountLabel.setText("<html><span style='font-size:16px'>🏦</span> " + 
+            PropertyLoader.getProperty("investment_calculator.properties", "final.amount.label", "Final Amount: SAR ") + 
+            (finalAmountLabel.getText().isEmpty() ? "0.00" : finalAmountLabel.getText().replace("Final Amount: SAR ", "")));
         
+        summaryPanel.add(totalMonthsLabel);
         summaryPanel.add(totalProfitLabel);
         summaryPanel.add(totalCharityLabel);
         summaryPanel.add(finalAmountLabel);
@@ -163,7 +191,8 @@ public class InvestmentCalculatorView extends JPanel {
     }
 
     public void showHelpDialog() {
-        JDialog helpDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Investment Calculator Help", true);
+        JDialog helpDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), 
+            PropertyLoader.getProperty("investment_calculator.properties", "help.dialog.title", "Investment Calculator Help"), true);
         helpDialog.setLayout(new BorderLayout(15, 15));
         helpDialog.getContentPane().setBackground(BACKGROUND_COLOR);
 
@@ -173,34 +202,14 @@ public class InvestmentCalculatorView extends JPanel {
         description.setFont(MAIN_FONT);
         description.setLineWrap(true);
         description.setWrapStyleWord(true);
-        description.setText(
-            "Welcome to the Investment Calculator! 🎉\n\n" +
-            "This tool helps you see how your investment will grow over time.\n\n" +
-            "Simply fill in these details:\n\n" +
-            "1️⃣ Investment Amount\n" +
-            "   How much money you want to invest\n\n" +
-            "2️⃣ Monthly Profit %\n" +
-            "   How much profit you expect to earn each month\n\n" +
-            "3️⃣ Charity % of Profit\n" +
-            "   How much of your profit you want to donate\n\n" +
-            "4️⃣ Number of Months\n" +
-            "   How long you want to keep your investment\n\n" +
-            "After clicking Calculate, you'll see:\n" +
-            "✓ A monthly breakdown of your investment\n" +
-            "✓ Your total profit\n" +
-            "✓ How much you've donated to charity\n" +
-            "✓ Your final investment value\n\n" +
-            "Need to save your results?\n" +
-            "→ Click 'Export to CSV' to save as a spreadsheet\n" +
-            "→ Click 'Export to PDF' to save as a document\n" +
-            "→ Click 'Show Chart' to see your progress visually"
-        );
+        description.setText(PropertyLoader.getProperty("investment_calculator.properties", "help.content", 
+            "Welcome to the Investment Calculator! 🎉\n\nThis tool helps you see how your investment will grow over time."));
 
         JScrollPane scrollPane = new JScrollPane(description);
         scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         helpDialog.add(scrollPane, BorderLayout.CENTER);
 
-        JButton closeButton = new JButton("Got it! 👍");
+        JButton closeButton = new JButton(PropertyLoader.getProperty("investment_calculator.properties", "help.close.button", "Got it! 👍"));
         closeButton.setFont(MAIN_FONT);
         closeButton.setBackground(PRIMARY_COLOR);
         closeButton.setForeground(Color.WHITE);
@@ -218,7 +227,8 @@ public class InvestmentCalculatorView extends JPanel {
     }
 
     public void showExplainChartDialog() {
-        JDialog explainDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Chart Explanation", false);
+        JDialog explainDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), 
+            PropertyLoader.getProperty("investment_calculator.properties", "chart.explanation.dialog.title", "Chart Explanation"), false);
         explainDialog.setLayout(new BorderLayout(15, 15));
         explainDialog.getContentPane().setBackground(BACKGROUND_COLOR);
 
@@ -228,37 +238,14 @@ public class InvestmentCalculatorView extends JPanel {
         explanation.setFont(MAIN_FONT);
         explanation.setLineWrap(true);
         explanation.setWrapStyleWord(true);
-        explanation.setText(
-            "📊 Investment Calculator Chart Explanation\n\n" +
-            "This stacked bar chart shows the monthly breakdown of your investment:\n\n" +
-            "🔵 BLUE (Bottom) - Investment Value:\n" +
-            "   • Your base investment amount for each month\n" +
-            "   • This is the foundation of your investment\n" +
-            "   • Grows as you add profits to your investment\n\n" +
-            "🟢 GREEN (Middle) - Net Profit:\n" +
-            "   • The profit you keep after charity deductions\n" +
-            "   • This is added to your investment value\n" +
-            "   • Shows your actual earnings\n\n" +
-            "🔴 RED (Top) - Charity:\n" +
-            "   • The amount donated to charity each month\n" +
-            "   • Deducted from your monthly profit\n" +
-            "   • Shows your charitable contributions\n\n" +
-            "📈 What to Look For:\n" +
-            "• Total bar height = Total investment value\n" +
-            "• Growing bars = Your investment is growing\n" +
-            "• Green section = Your net earnings\n" +
-            "• Red section = Your charitable impact\n\n" +
-            "💡 Tips:\n" +
-            "• Hover over bars to see exact values\n" +
-            "• Compare months to see growth trends\n" +
-            "• The chart shows your complete financial picture"
-        );
+        explanation.setText(PropertyLoader.getProperty("investment_calculator.properties", "chart.explanation.content", 
+            "📊 Investment Calculator Chart Explanation\n\nThis stacked bar chart shows the monthly breakdown of your investment."));
 
         JScrollPane scrollPane = new JScrollPane(explanation);
         scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         explainDialog.add(scrollPane, BorderLayout.CENTER);
 
-        JButton closeButton = new JButton("Got it! 👍");
+        JButton closeButton = new JButton(PropertyLoader.getProperty("investment_calculator.properties", "chart.explanation.close.button", "Got it! 👍"));
         closeButton.setFont(MAIN_FONT);
         closeButton.setBackground(PRIMARY_COLOR);
         closeButton.setForeground(Color.WHITE);

@@ -9,9 +9,9 @@ public class GoalPlannerModel {
     private double lastMonthProfit = 0;
     private int monthsRequired = 0;
     private final DefaultTableModel tableModel = new DefaultTableModel(
-            new String[]{"Month", "Total Invested", "Investment Value", "Monthly Profit"}, 0);
+            new String[]{"Month", "Total Invested", "Investment Value", "Monthly Profit", "Charity"}, 0);
 
-    public boolean calculate(double targetProfit, double monthlyInvest, double ratePct) {
+    public boolean calculate(double targetProfit, double monthlyInvest, double ratePct, double charityPct) {
         tableModel.setRowCount(0);
         totalInvestment = 0;
         finalInvestmentValue = 0;
@@ -19,18 +19,22 @@ public class GoalPlannerModel {
         monthsRequired = 0;
         
         double rate = ratePct / 100.0;
+        double charityRate = charityPct / 100.0;
         double currentValue = 0;
         
         while (true) {
             monthsRequired++;
             currentValue += monthlyInvest;
             double profit = currentValue * rate;
+            double charity = profit * charityRate;
+            double profitAfterCharity = profit - charity;
             
             tableModel.addRow(new Object[]{
                 monthsRequired,
                 f(monthsRequired * monthlyInvest),
                 f(currentValue),
-                f(profit)
+                f(profit),
+                f(charity)
             });
             
             if (profit >= targetProfit) {
@@ -39,7 +43,7 @@ public class GoalPlannerModel {
                 break;
             }
             
-            currentValue += profit;
+            currentValue += profitAfterCharity;
         }
         
         totalInvestment = monthsRequired * monthlyInvest;
