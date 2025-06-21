@@ -294,4 +294,4 @@ For support and questions:
 
 ---
 
-**Happy Investing! 💰📈** 
+**Happy Investing!** 
