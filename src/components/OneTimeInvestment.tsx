@@ -1,0 +1,290 @@
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { Calculator, TrendingUp, Heart } from 'lucide-react';
+import { OneTimeInvestmentInputs, CalculationResult, SummaryData } from '../types';
+import { calculateOneTimeInvestment, formatCurrency } from '../utils/calculations';
+import { validateOneTimeInvestment, getErrorMessage } from '../utils/validation';
+import { exportToCSV, exportToExcel, exportToPDF, exportChartToPNG } from '../utils/export';
+import { DEFAULT_ONE_TIME_INVESTMENT } from '../constants/defaults';
+
+const OneTimeInvestment: React.FC = () => {
+  const [results, setResults] = useState<CalculationResult[]>([]);
+  const [summary, setSummary] = useState<SummaryData | null>(null);
+  const [errors, setErrors] = useState<any[]>([]);
+  
+  const { register, handleSubmit, watch } = useForm<OneTimeInvestmentInputs>({
+    defaultValues: DEFAULT_ONE_TIME_INVESTMENT
+  });
+  
+  const watchedValues = watch();
+  
+  const onSubmit = (data: OneTimeInvestmentInputs) => {
+    const validationErrors = validateOneTimeInvestment(data);
+    setErrors(validationErrors);
+    
+    if (validationErrors.length === 0) {
+      const { results: calcResults, summary: calcSummary } = calculateOneTimeInvestment(data);
+      setResults(calcResults);
+      setSummary(calcSummary);
+    }
+  };
+  
+  const handleExport = (format: 'csv' | 'xlsx' | 'pdf') => {
+    if (results.length === 0) return;
+    const filename = `one-time-investment-${new Date().toISOString().split('T')[0]}`;
+    const inputs = watchedValues;
+    switch (format) {
+      case 'csv':
+        exportToCSV(results, filename, inputs, summary || undefined);
+        break;
+      case 'xlsx':
+        exportToExcel(results, filename, inputs, summary || undefined);
+        break;
+      case 'pdf':
+        exportToPDF('one-time-results-table', filename, inputs, summary || undefined);
+        break;
+    }
+  };
+  
+  const handleChartExport = () => {
+    exportChartToPNG('one-time-chart', `one-time-chart-${new Date().toISOString().split('T')[0]}`);
+  };
+  
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center space-x-3">
+        <Calculator className="w-8 h-8 text-primary-600" />
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">One-Time Investment Calculator</h2>
+          <p className="text-gray-600">Calculate projected returns from a lump-sum investment</p>
+        </div>
+      </div>
+      
+      {/* Input Form */}
+      <div className="card">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Investment Amount
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  step="0.01"
+                  className="input-field"
+                  placeholder="10000"
+                  {...register('investmentAmount', { valueAsNumber: true })}
+                />
+              </div>
+              {getErrorMessage(errors, 'investmentAmount') && (
+                <p className="text-red-500 text-sm mt-1">{getErrorMessage(errors, 'investmentAmount')}</p>
+              )}
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Duration
+              </label>
+              <div className="flex space-x-2">
+                <input
+                  type="number"
+                  className="input-field"
+                  placeholder="12"
+                  {...register('duration', { valueAsNumber: true })}
+                />
+                <select
+                  className="input-field"
+                  {...register('durationUnit')}
+                >
+                  <option value="months">Months</option>
+                  <option value="years">Years</option>
+                </select>
+              </div>
+              {getErrorMessage(errors, 'duration') && (
+                <p className="text-red-500 text-sm mt-1">{getErrorMessage(errors, 'duration')}</p>
+              )}
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Profit Rate (% per month)
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  step="0.01"
+                  className="input-field"
+                  placeholder="8.00"
+                  {...register('profitRate', { valueAsNumber: true })}
+                />
+              </div>
+              {getErrorMessage(errors, 'profitRate') && (
+                <p className="text-red-500 text-sm mt-1">{getErrorMessage(errors, 'profitRate')}</p>
+              )}
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Charity Deduction (%)
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  min="1"
+                  max="100"
+                  step="0.1"
+                  className="input-field"
+                  placeholder="1-100"
+                  {...register('charityDeduction', { valueAsNumber: true })}
+                />
+              </div>
+              {getErrorMessage(errors, 'charityDeduction') && (
+                <p className="text-red-500 text-sm mt-1">{getErrorMessage(errors, 'charityDeduction')}</p>
+              )}
+            </div>
+          </div>
+          
+          <button type="submit" className="btn-primary w-full md:w-auto">
+            Calculate Investment
+          </button>
+        </form>
+      </div>
+      
+      {/* Results */}
+      {results.length > 0 && (
+        <>
+          {/* Summary Section */}
+          <div className="card">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Investment Summary</h3>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <div className="text-sm text-blue-600 font-medium">Total Investment</div>
+                <div className="text-2xl font-bold text-blue-700">
+                  {formatCurrency(summary?.requiredMonthlyInvestment || 0)}
+                </div>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg">
+                <div className="text-sm text-green-600 font-medium">Total Profit</div>
+                <div className="text-2xl font-bold text-green-700">
+                  {formatCurrency(summary?.totalProfit || 0)}
+                </div>
+              </div>
+              <div className="bg-yellow-50 p-4 rounded-lg">
+                <div className="text-sm text-yellow-600 font-medium">Total Charity</div>
+                <div className="text-2xl font-bold text-yellow-700">
+                  {formatCurrency(summary?.totalCharity || 0)}
+                </div>
+              </div>
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <div className="text-sm text-purple-600 font-medium">Final Value</div>
+                <div className="text-2xl font-bold text-purple-700">
+                  {formatCurrency(summary?.finalValue || 0)}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Chart */}
+          <div className="card">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Monthly Investment, Profit, and Charity</h3>
+              <button onClick={handleChartExport} className="btn-secondary text-sm">
+                Export PNG
+              </button>
+            </div>
+            <div id="one-time-chart" className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={results}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip 
+                    content={({ active, payload, label }) => {
+                      if (!active || !payload || !payload.length) return null;
+                      const monthlyProfit = payload[0]?.payload?.profit;
+                      const monthlyCharity = payload[0]?.payload?.charity;
+                      const investmentValue = payload[0]?.payload?.accumulatedValue;
+                      return (
+                        <div className="bg-white p-3 rounded-lg shadow text-xs text-gray-800">
+                          <div className="font-semibold mb-1">Month {label}</div>
+                          <div>Profit: <span className="font-bold">{formatCurrency(monthlyProfit ?? 0)}</span></div>
+                          <div>Charity: <span className="font-bold">{formatCurrency(monthlyCharity ?? 0)}</span></div>
+                          <div>Investment Value: <span className="font-bold">{formatCurrency(investmentValue ?? 0)}</span></div>
+                        </div>
+                      );
+                    }}
+                  />
+                  <Legend />
+                  <Bar dataKey="accumulatedValue" fill="#3b82f6" name="Investment Value" />
+                  <Bar dataKey="totalProfit" fill="#10b981" name="Cumulative Profit" />
+                  <Bar dataKey="totalCharity" fill="#f59e0b" name="Cumulative Charity" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          
+          {/* Results Table */}
+          <div className="card">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Monthly Breakdown</h3>
+              <div className="space-x-2">
+                <button onClick={() => handleExport('csv')} className="btn-secondary text-sm">
+                  Export CSV
+                </button>
+                <button onClick={() => handleExport('xlsx')} className="btn-secondary text-sm">
+                  Export Excel
+                </button>
+                <button onClick={() => handleExport('pdf')} className="btn-secondary text-sm">
+                  Export PDF
+                </button>
+              </div>
+            </div>
+            <div id="one-time-results-table" className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Month
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Profit
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Charity
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Investment Value
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {results.map((result) => (
+                    <tr key={result.month}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {result.month}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {formatCurrency(result.profit)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {formatCurrency(result.charity)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {formatCurrency(result.accumulatedValue)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default OneTimeInvestment; 
