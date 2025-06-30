@@ -1,9 +1,9 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Target, TrendingUp } from 'lucide-react';
-import { GoalPlannerInputs, CalculationResult, SummaryData } from '../types';
-import { calculateGoalPlanner, formatCurrency } from '../utils/calculations';
-import { validateGoalPlanner, getErrorMessage } from '../utils/validation';
+import { GoalPlannerInputs, CalculationResult, SummaryData } from '../models/types';
+import { calculateGoalPlanner, formatCurrency } from '../models/calculations';
+import { validateGoalPlanner, getErrorMessage } from '../models/validation';
 import { exportToCSV, exportToExcel, exportToPDF, exportChartToPNG } from '../utils/export';
 import { DEFAULT_GOAL_PLANNER } from '../constants/defaults';
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { Repeat, Calendar, TrendingUp, Heart } from 'lucide-react';
-import { MonthlyInvestmentInputs, CalculationResult, SummaryData } from '../types';
-import { calculateMonthlyInvestment, formatCurrency } from '../utils/calculations';
-import { validateMonthlyInvestment, getErrorMessage } from '../utils/validation';
+import { MonthlyInvestmentInputs, CalculationResult, SummaryData } from '../models/types';
+import { calculateMonthlyInvestment, formatCurrency } from '../models/calculations';
+import { validateMonthlyInvestment, getErrorMessage } from '../models/validation';
 import { exportToCSV, exportToExcel, exportToPDF, exportChartToPNG } from '../utils/export';
 import { DEFAULT_MONTHLY_INVESTMENT } from '../constants/defaults';
 

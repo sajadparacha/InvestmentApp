@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Calculator, Target, Repeat, HelpCircle } from 'lucide-react';
 import OneTimeInvestmentController from './controllers/OneTimeInvestmentController';
-import GoalPlanner from './components/GoalPlanner';
-import MonthlyInvestment from './components/MonthlyInvestment';
+import GoalPlannerController from './controllers/GoalPlannerController';
+import MonthlyInvestmentController from './controllers/MonthlyInvestmentController';
 import HelpGuide from './components/HelpGuide';
 import './index.css';
 import { OneTimeInvestmentInputs, CalculationResult, SummaryData, GoalPlannerInputs, MonthlyInvestmentInputs } from './types';
@@ -16,18 +16,6 @@ const App: React.FC = () => {
   const [oneTimeResults, setOneTimeResults] = useState<CalculationResult[]>([]);
   const [oneTimeSummary, setOneTimeSummary] = useState<SummaryData | null>(null);
   const [oneTimeErrors, setOneTimeErrors] = useState<any[]>([]);
-
-  // Goal Planner state
-  const [goalPlannerInputs, setGoalPlannerInputs] = useState<GoalPlannerInputs>(DEFAULT_GOAL_PLANNER);
-  const [goalPlannerResults, setGoalPlannerResults] = useState<CalculationResult[]>([]);
-  const [goalPlannerSummary, setGoalPlannerSummary] = useState<SummaryData | null>(null);
-  const [goalPlannerErrors, setGoalPlannerErrors] = useState<any[]>([]);
-
-  // Monthly Investment state
-  const [monthlyInputs, setMonthlyInputs] = useState<MonthlyInvestmentInputs>(DEFAULT_MONTHLY_INVESTMENT);
-  const [monthlyResults, setMonthlyResults] = useState<CalculationResult[]>([]);
-  const [monthlySummary, setMonthlySummary] = useState<SummaryData | null>(null);
-  const [monthlyErrors, setMonthlyErrors] = useState<any[]>([]);
 
   const tabs = [
     {
@@ -107,28 +95,10 @@ const App: React.FC = () => {
             <OneTimeInvestmentController />
           </div>
           <div style={{ display: activeTab === 1 ? 'block' : 'none' }}>
-            <GoalPlanner
-              inputs={goalPlannerInputs}
-              setInputs={setGoalPlannerInputs}
-              results={goalPlannerResults}
-              setResults={setGoalPlannerResults}
-              summary={goalPlannerSummary}
-              setSummary={setGoalPlannerSummary}
-              errors={goalPlannerErrors}
-              setErrors={setGoalPlannerErrors}
-            />
+            <GoalPlannerController />
           </div>
           <div style={{ display: activeTab === 2 ? 'block' : 'none' }}>
-            <MonthlyInvestment
-              inputs={monthlyInputs}
-              setInputs={setMonthlyInputs}
-              results={monthlyResults}
-              setResults={setMonthlyResults}
-              summary={monthlySummary}
-              setSummary={setMonthlySummary}
-              errors={monthlyErrors}
-              setErrors={setMonthlyErrors}
-            />
+            <MonthlyInvestmentController />
           </div>
           <div style={{ display: activeTab === 3 ? 'block' : 'none' }}>
             <HelpGuide />
