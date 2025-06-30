@@ -6,6 +6,7 @@ import { calculateGoalPlanner, formatCurrency } from '../models/calculations';
 import { validateGoalPlanner, getErrorMessage } from '../models/validation';
 import { exportToCSV, exportToExcel, exportToPDF, exportChartToPNG } from '../utils/export';
 import { DEFAULT_GOAL_PLANNER, EMPTY_GOAL_PLANNER } from '../constants/defaults';
+import { useTranslation } from 'react-i18next';
 
 interface GoalPlannerProps {
   inputs: GoalPlannerInputs;
@@ -28,6 +29,8 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
   errors,
   setErrors
 }) => {
+  const { t } = useTranslation();
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
     setInputs((prev) => ({
@@ -81,8 +84,8 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
       <div className="flex items-center space-x-3">
         <Target className="w-8 h-8 text-primary-600" />
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Goal Planner</h2>
-          <p className="text-gray-600">Calculate required monthly investment to reach your financial goal</p>
+          <h2 className="text-2xl font-bold text-gray-900">{t('goalPlanner')}</h2>
+          <p className="text-gray-600">{t('goalPlannerDesc')}</p>
         </div>
       </div>
       {/* Input Form */}
@@ -91,7 +94,7 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Target Monthly Profit (after charity)
+                {t('targetMonthlyProfit')}
               </label>
               <input
                 type="number"
@@ -108,7 +111,7 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Monthly Investment Amount
+                {t('monthlyInvestment')}
               </label>
               <input
                 type="number"
@@ -125,7 +128,7 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Profit Rate (% per month)
+                {t('profitRate')}
               </label>
               <input
                 type="number"
@@ -142,7 +145,7 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Charity Deduction (%)
+                {t('charityDeduction')}
               </label>
               <input
                 type="number"
@@ -161,10 +164,10 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
             </div>
           </div>
           <button type="submit" className="btn-primary w-full md:w-auto">
-            Calculate Required Investment
+            {t('calculate')}
           </button>
           <button type="button" className="btn-primary w-full md:w-auto ml-2" onClick={handleClear}>
-            Clear
+            {t('clear')}
           </button>
         </form>
       </div>

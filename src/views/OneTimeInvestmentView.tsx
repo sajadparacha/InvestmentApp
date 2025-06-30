@@ -6,6 +6,7 @@ import { calculateOneTimeInvestment, formatCurrency } from '../models/calculatio
 import { validateOneTimeInvestment, getErrorMessage } from '../models/validation';
 import { exportToCSV, exportToExcel, exportToPDF, exportChartToPNG } from '../utils/export';
 import { DEFAULT_ONE_TIME_INVESTMENT, EMPTY_ONE_TIME_INVESTMENT } from '../constants/defaults';
+import { useTranslation } from 'react-i18next';
 
 interface OneTimeInvestmentProps {
   inputs: OneTimeInvestmentInputs;
@@ -28,6 +29,8 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
   errors,
   setErrors
 }) => {
+  const { t } = useTranslation();
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     setInputs((prev) => ({
@@ -81,8 +84,8 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
       <div className="flex items-center space-x-3">
         <Calculator className="w-8 h-8 text-primary-600" />
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">One-Time Investment Calculator</h2>
-          <p className="text-gray-600">Calculate projected returns from a lump-sum investment</p>
+          <h2 className="text-2xl font-bold text-gray-900">{t('oneTimeInvestment')}</h2>
+          <p className="text-gray-600">{t('oneTimeInvestmentDesc')}</p>
         </div>
       </div>
       {/* Input Form */}
@@ -91,7 +94,7 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Investment Amount
+                {t('investmentAmount')}
               </label>
               <div className="relative">
                 <input
@@ -110,7 +113,7 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Duration
+                {t('duration')}
               </label>
               <div className="flex space-x-2">
                 <input
@@ -127,8 +130,8 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
                   value={inputs.durationUnit}
                   onChange={handleInputChange}
                 >
-                  <option value="months">Months</option>
-                  <option value="years">Years</option>
+                  <option value="months">{t('months')}</option>
+                  <option value="years">{t('years')}</option>
                 </select>
               </div>
               {getErrorMessage(errors, 'duration') && (
@@ -137,7 +140,7 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Profit Rate (% per month)
+                {t('profitRate')}
               </label>
               <div className="relative">
                 <input
@@ -156,7 +159,7 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Charity Deduction (%)
+                {t('charityDeduction')}
               </label>
               <div className="relative">
                 <input
@@ -177,10 +180,10 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
             </div>
           </div>
           <button type="submit" className="btn-primary w-full md:w-auto">
-            Calculate Investment
+            {t('calculate')}
           </button>
           <button type="button" className="btn-primary w-full md:w-auto ml-2" onClick={handleClear}>
-            Clear
+            {t('clear')}
           </button>
         </form>
       </div>
@@ -189,28 +192,28 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
         <>
           {/* Summary Section */}
           <div className="card">
-            <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">Investment Summary</h3>
+            <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">{t('investmentSummary')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-blue-50 p-4 rounded-lg">
-                <div className="text-sm text-blue-600 font-medium">Total Investment</div>
+                <div className="text-sm text-blue-600 font-medium">{t('totalInvestment')}</div>
                 <div className="text-2xl font-bold text-blue-700">
                   {formatCurrency(summary?.requiredMonthlyInvestment || 0)}
                 </div>
               </div>
               <div className="bg-green-50 p-4 rounded-lg">
-                <div className="text-sm text-green-600 font-medium">Total Profit</div>
+                <div className="text-sm text-green-600 font-medium">{t('totalProfit')}</div>
                 <div className="text-2xl font-bold text-green-700">
                   {formatCurrency(summary?.totalProfit || 0)}
                 </div>
               </div>
               <div className="bg-yellow-50 p-4 rounded-lg">
-                <div className="text-sm text-yellow-600 font-medium">Total Charity</div>
+                <div className="text-sm text-yellow-600 font-medium">{t('totalCharity')}</div>
                 <div className="text-2xl font-bold text-yellow-700">
                   {formatCurrency(summary?.totalCharity || 0)}
                 </div>
               </div>
               <div className="bg-purple-50 p-4 rounded-lg">
-                <div className="text-sm text-purple-600 font-medium">Final Value</div>
+                <div className="text-sm text-purple-600 font-medium">{t('finalValue')}</div>
                 <div className="text-2xl font-bold text-purple-700">
                   {formatCurrency(summary?.finalValue || 0)}
                 </div>
@@ -220,9 +223,9 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
           {/* Chart */}
           <div className="card">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Monthly Investment, Profit, and Charity</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{t('monthlyInvestmentProfitCharity')}</h3>
               <button onClick={handleChartExport} className="btn-secondary text-sm">
-                Export PNG
+                {t('exportPNG')}
               </button>
             </div>
             <div id="one-time-chart" className="h-80">
@@ -239,18 +242,18 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
                       const investmentValue = payload[0]?.payload?.accumulatedValue;
                       return (
                         <div className="bg-white p-3 rounded-lg shadow text-xs text-gray-800">
-                          <div className="font-semibold mb-1">Month {label}</div>
-                          <div>Profit: <span className="font-bold">{formatCurrency(monthlyProfit ?? 0)}</span></div>
-                          <div>Charity: <span className="font-bold">{formatCurrency(monthlyCharity ?? 0)}</span></div>
-                          <div>Investment Value: <span className="font-bold">{formatCurrency(investmentValue ?? 0)}</span></div>
+                          <div className="font-semibold mb-1">{t('month')} {label}</div>
+                          <div>{t('profit')}: <span className="font-bold">{formatCurrency(monthlyProfit ?? 0)}</span></div>
+                          <div>{t('charity')}: <span className="font-bold">{formatCurrency(monthlyCharity ?? 0)}</span></div>
+                          <div>{t('investmentValue')}: <span className="font-bold">{formatCurrency(investmentValue ?? 0)}</span></div>
                         </div>
                       );
                     }}
                   />
                   <Legend />
-                  <Bar dataKey="accumulatedValue" fill="#3b82f6" name="Investment Value" />
-                  <Bar dataKey="totalProfit" fill="#10b981" name="Cumulative Profit" />
-                  <Bar dataKey="totalCharity" fill="#f59e0b" name="Cumulative Charity" />
+                  <Bar dataKey="accumulatedValue" fill="#3b82f6" name={t('investmentValue')} />
+                  <Bar dataKey="totalProfit" fill="#10b981" name={t('cumulativeProfit')} />
+                  <Bar dataKey="totalCharity" fill="#f59e0b" name={t('cumulativeCharity')} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -258,7 +261,7 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
           {/* Results Table */}
           <div className="card">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Monthly Breakdown</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{t('monthlyBreakdown')}</h3>
               <div className="space-x-2">
                 <button onClick={() => handleExport('csv')} className="btn-secondary text-sm">
                   Export CSV
@@ -275,18 +278,10 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Month
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Profit
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Charity
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Investment Value
-                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('month')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('profit')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('charity')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('investmentValue')}</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">

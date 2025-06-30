@@ -6,34 +6,41 @@ import MonthlyInvestmentController from './controllers/MonthlyInvestmentControll
 import HelpGuide from './components/HelpGuide';
 import CreditsView from './views/CreditsView';
 import './index.css';
+import './i18n';
+import { useTranslation } from 'react-i18next';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const { t, i18n } = useTranslation();
+
+  const handleLangChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    i18n.changeLanguage(e.target.value);
+  };
 
   const tabs = [
     {
       id: 0,
-      name: 'One-Time Investment',
+      name: t('oneTimeInvestment'),
       icon: <Calculator className="w-5 h-5" />
     },
     {
       id: 1,
-      name: 'Goal Planner',
+      name: t('goalPlanner'),
       icon: <Target className="w-5 h-5" />
     },
     {
       id: 2,
-      name: 'Monthly Investment',
+      name: t('monthlyInvestment'),
       icon: <Repeat className="w-5 h-5" />
     },
     {
       id: 3,
-      name: 'Help & Guidance',
+      name: t('help'),
       icon: <HelpCircle className="w-5 h-5" />
     },
     {
       id: 4,
-      name: 'Credits',
+      name: t('credits'),
       icon: <span className="w-5 h-5">©</span>
     }
   ];
@@ -49,17 +56,26 @@ const App: React.FC = () => {
                 <Calculator className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">InvestmentApp</h1>
-                <p className="text-sm text-gray-600">Financial Planning Made Simple</p>
+                <h1 className="text-2xl font-bold text-gray-900">{t('appTitle')}</h1>
+                <p className="text-sm text-gray-600">{t('appSubtitle')}</p>
               </div>
             </div>
             <div className="hidden md:block">
               <div className="flex items-center space-x-4 text-sm text-gray-500">
-                <span>Version 1.0.0</span>
+                <span>{t('version', { version: '1.0.0' })}</span>
                 <span>•</span>
-                <span>React + TypeScript</span>
+                <span>{t('techStack')}</span>
               </div>
             </div>
+            <select
+              className="ml-4 border rounded px-2 py-1 text-sm"
+              value={i18n.language}
+              onChange={handleLangChange}
+              aria-label="Select language"
+            >
+              <option value="en">{t('langEnglish')}</option>
+              <option value="ur">{t('langUrdu')}</option>
+            </select>
           </div>
         </div>
       </header>
@@ -67,19 +83,15 @@ const App: React.FC = () => {
       {/* Navigation Tabs */}
       <nav className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8 overflow-x-auto">
+          <div className="flex space-x-2 mb-8 overflow-x-auto whitespace-nowrap flex-nowrap border-b border-gray-200 scrollbar-thin scrollbar-thumb-gray-300">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
+                className={`flex items-center px-4 py-2 rounded-t-lg font-medium transition-colors duration-200 focus:outline-none flex-shrink-0 min-w-[120px] md:min-w-[160px] ${activeTab === tab.id ? 'bg-primary-100 text-primary-700' : 'text-gray-600 hover:bg-gray-100'}`}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-colors duration-200 ${
-                  activeTab === tab.id
-                    ? 'border-primary-500 text-primary-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
               >
                 {tab.icon}
-                <span>{tab.name}</span>
+                <span className="ml-2">{tab.name}</span>
               </button>
             ))}
           </div>

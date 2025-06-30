@@ -6,6 +6,7 @@ import { calculateMonthlyInvestment, formatCurrency } from '../models/calculatio
 import { validateMonthlyInvestment, getErrorMessage } from '../models/validation';
 import { exportToCSV, exportToExcel, exportToPDF, exportChartToPNG } from '../utils/export';
 import { DEFAULT_MONTHLY_INVESTMENT, EMPTY_MONTHLY_INVESTMENT } from '../constants/defaults';
+import { useTranslation } from 'react-i18next';
 
 interface MonthlyInvestmentProps {
   inputs: MonthlyInvestmentInputs;
@@ -28,6 +29,8 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
   errors,
   setErrors
 }) => {
+  const { t } = useTranslation();
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
     setInputs((prev) => ({
@@ -74,9 +77,9 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
     const totalProfit = summary.totalProfit;
     const totalCharity = summary.totalCharity;
     return [
-      { name: 'Capital Invested', value: totalInvested, color: '#3b82f6' },
-      { name: 'Total Profit', value: totalProfit, color: '#10b981' },
-      { name: 'Total Charity', value: totalCharity, color: '#f59e0b' }
+      { name: t('capitalInvested'), value: totalInvested, color: '#3b82f6' },
+      { name: t('totalProfit'), value: totalProfit, color: '#10b981' },
+      { name: t('totalCharity'), value: totalCharity, color: '#f59e0b' }
     ];
   };
 
@@ -93,8 +96,8 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
       <div className="flex items-center space-x-3">
         <Repeat className="w-8 h-8 text-primary-600" />
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Monthly Recurring Investment Calculator</h2>
-          <p className="text-gray-600">Calculate growth of monthly recurring investments with optional deductions</p>
+          <h2 className="text-2xl font-bold text-gray-900">{t('monthlyInvestment')}</h2>
+          <p className="text-gray-600">{t('monthlyInvestmentDesc')}</p>
         </div>
       </div>
       {/* Input Form */}
@@ -103,7 +106,7 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Monthly Investment Amount
+                {t('monthlyInvestmentAmount')}
               </label>
               <input
                 type="number"
@@ -120,7 +123,7 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Duration (Months)
+                {t('duration')}
               </label>
               <input
                 type="number"
@@ -136,7 +139,7 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Profit Rate (%)
+                {t('profitRate')}
               </label>
               <input
                 type="number"
@@ -153,7 +156,7 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Charity Deduction (%)
+                {t('charityDeduction')}
               </label>
               <input
                 type="number"
@@ -172,10 +175,10 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
             </div>
           </div>
           <button type="submit" className="btn-primary w-full md:w-auto">
-            Calculate Monthly Investment
+            {t('calculate')}
           </button>
           <button type="button" className="btn-primary w-full md:w-auto ml-2" onClick={handleClear}>
-            Clear
+            {t('clear')}
           </button>
         </form>
       </div>
@@ -184,28 +187,28 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
         <>
           {/* Summary Section */}
           <div className="card">
-            <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">Investment Summary</h3>
+            <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">{t('investmentSummary')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-blue-50 p-4 rounded-lg">
-                <div className="text-sm text-blue-600 font-medium">Total Investment</div>
+                <div className="text-sm text-blue-600 font-medium">{t('totalInvestment')}</div>
                 <div className="text-2xl font-bold text-blue-700">
                   {formatCurrency(summary?.totalInvestment || 0)}
                 </div>
               </div>
               <div className="bg-green-50 p-4 rounded-lg">
-                <div className="text-sm text-green-600 font-medium">Total Profit</div>
+                <div className="text-sm text-green-600 font-medium">{t('totalProfit')}</div>
                 <div className="text-2xl font-bold text-green-700">
                   {formatCurrency(summary?.totalProfit || 0)}
                 </div>
               </div>
               <div className="bg-yellow-50 p-4 rounded-lg">
-                <div className="text-sm text-yellow-600 font-medium">Total Charity</div>
+                <div className="text-sm text-yellow-600 font-medium">{t('totalCharity')}</div>
                 <div className="text-2xl font-bold text-yellow-700">
                   {formatCurrency(summary?.totalCharity || 0)}
                 </div>
               </div>
               <div className="bg-purple-50 p-4 rounded-lg">
-                <div className="text-sm text-purple-600 font-medium">Final Value</div>
+                <div className="text-sm text-purple-600 font-medium">{t('finalValue')}</div>
                 <div className="text-2xl font-bold text-purple-700">
                   {formatCurrency(summary?.finalValue || 0)}
                 </div>
@@ -215,9 +218,9 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
           {/* Chart */}
           <div className="card">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Investment Breakdown</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{t('investmentBreakdown')}</h3>
               <button onClick={handleChartExport} className="btn-secondary text-sm">
-                Export PNG
+                {t('exportPNG')}
               </button>
             </div>
             <div id="monthly-chart" className="h-80">
@@ -237,7 +240,7 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: number) => [formatCurrency(value), 'Amount']} />
+                  <Tooltip formatter={(value: number) => [formatCurrency(value), t('amount')]} />
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>
@@ -246,7 +249,7 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
           {/* Results Table */}
           <div className="card">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Monthly Breakdown</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{t('monthlyBreakdown')}</h3>
               <div className="space-x-2">
                 <button onClick={() => handleExport('csv')} className="btn-secondary text-sm">
                   Export CSV
@@ -263,21 +266,11 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Month
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Monthly Investment
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Profit
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Charity
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Accumulated Value
-                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('month')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('monthlyInvestment')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('profit')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('charity')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('accumulatedValue')}</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
