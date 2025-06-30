@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Calculator, Target, Repeat, HelpCircle } from 'lucide-react';
-import OneTimeInvestment from './components/OneTimeInvestment';
+import OneTimeInvestmentController from './controllers/OneTimeInvestmentController';
 import GoalPlanner from './components/GoalPlanner';
 import MonthlyInvestment from './components/MonthlyInvestment';
 import HelpGuide from './components/HelpGuide';
@@ -104,16 +104,7 @@ const App: React.FC = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-8">
           <div style={{ display: activeTab === 0 ? 'block' : 'none' }}>
-            <OneTimeInvestment
-              inputs={oneTimeInputs}
-              setInputs={setOneTimeInputs}
-              results={oneTimeResults}
-              setResults={setOneTimeResults}
-              summary={oneTimeSummary}
-              setSummary={setOneTimeSummary}
-              errors={oneTimeErrors}
-              setErrors={setOneTimeErrors}
-            />
+            <OneTimeInvestmentController />
           </div>
           <div style={{ display: activeTab === 1 ? 'block' : 'none' }}>
             <GoalPlanner
