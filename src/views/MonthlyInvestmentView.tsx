@@ -5,7 +5,7 @@ import { MonthlyInvestmentInputs, CalculationResult, SummaryData } from '../mode
 import { calculateMonthlyInvestment, formatCurrency } from '../models/calculations';
 import { validateMonthlyInvestment, getErrorMessage } from '../models/validation';
 import { exportToCSV, exportToExcel, exportToPDF, exportChartToPNG } from '../utils/export';
-import { DEFAULT_MONTHLY_INVESTMENT } from '../constants/defaults';
+import { DEFAULT_MONTHLY_INVESTMENT, EMPTY_MONTHLY_INVESTMENT } from '../constants/defaults';
 
 interface MonthlyInvestmentProps {
   inputs: MonthlyInvestmentInputs;
@@ -81,7 +81,7 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
   };
 
   const handleClear = () => {
-    setInputs(DEFAULT_MONTHLY_INVESTMENT);
+    setInputs(EMPTY_MONTHLY_INVESTMENT);
     setResults([]);
     setSummary(null);
     setErrors([]);

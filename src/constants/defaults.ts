@@ -1,4 +1,4 @@
-import { OneTimeInvestmentInputs, GoalPlannerInputs, MonthlyInvestmentInputs } from '../types';
+import { OneTimeInvestmentInputs, GoalPlannerInputs, MonthlyInvestmentInputs } from '../models/types';
 
 export const DEFAULT_ONE_TIME_INVESTMENT: OneTimeInvestmentInputs = {
   investmentAmount: 10000,
@@ -20,4 +20,26 @@ export const DEFAULT_MONTHLY_INVESTMENT: MonthlyInvestmentInputs = {
   duration: 12,
   profitRate: 2.5,
   charityDeduction: 15
+};
+
+export const EMPTY_ONE_TIME_INVESTMENT: OneTimeInvestmentInputs = {
+  investmentAmount: '',
+  duration: '',
+  durationUnit: 'months',
+  profitRate: '',
+  charityDeduction: ''
+};
+
+export const EMPTY_GOAL_PLANNER: GoalPlannerInputs = {
+  targetMonthlyProfit: '',
+  monthlyInvestment: '',
+  profitRate: '',
+  charityDeduction: ''
+};
+
+export const EMPTY_MONTHLY_INVESTMENT: MonthlyInvestmentInputs = {
+  monthlyAmount: '',
+  duration: '',
+  profitRate: '',
+  charityDeduction: ''
 }; 

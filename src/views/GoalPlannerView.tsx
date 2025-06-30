@@ -5,7 +5,7 @@ import { GoalPlannerInputs, CalculationResult, SummaryData } from '../models/typ
 import { calculateGoalPlanner, formatCurrency } from '../models/calculations';
 import { validateGoalPlanner, getErrorMessage } from '../models/validation';
 import { exportToCSV, exportToExcel, exportToPDF, exportChartToPNG } from '../utils/export';
-import { DEFAULT_GOAL_PLANNER } from '../constants/defaults';
+import { DEFAULT_GOAL_PLANNER, EMPTY_GOAL_PLANNER } from '../constants/defaults';
 
 interface GoalPlannerProps {
   inputs: GoalPlannerInputs;
@@ -69,7 +69,7 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
   };
 
   const handleClear = () => {
-    setInputs(DEFAULT_GOAL_PLANNER);
+    setInputs(EMPTY_GOAL_PLANNER);
     setResults([]);
     setSummary(null);
     setErrors([]);

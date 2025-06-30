@@ -5,7 +5,7 @@ import { OneTimeInvestmentInputs, CalculationResult, SummaryData } from '../mode
 import { calculateOneTimeInvestment, formatCurrency } from '../models/calculations';
 import { validateOneTimeInvestment, getErrorMessage } from '../models/validation';
 import { exportToCSV, exportToExcel, exportToPDF, exportChartToPNG } from '../utils/export';
-import { DEFAULT_ONE_TIME_INVESTMENT } from '../constants/defaults';
+import { DEFAULT_ONE_TIME_INVESTMENT, EMPTY_ONE_TIME_INVESTMENT } from '../constants/defaults';
 
 interface OneTimeInvestmentProps {
   inputs: OneTimeInvestmentInputs;
@@ -69,7 +69,7 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
   };
 
   const handleClear = () => {
-    setInputs(DEFAULT_ONE_TIME_INVESTMENT);
+    setInputs(EMPTY_ONE_TIME_INVESTMENT);
     setResults([]);
     setSummary(null);
     setErrors([]);

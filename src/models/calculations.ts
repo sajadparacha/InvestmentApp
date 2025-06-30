@@ -4,10 +4,14 @@ import {
   MonthlyInvestmentInputs, 
   CalculationResult, 
   SummaryData 
-} from '../types';
+} from '../models/types';
 
 export const calculateOneTimeInvestment = (inputs: OneTimeInvestmentInputs): { results: CalculationResult[], summary: SummaryData } => {
-  const { investmentAmount, duration, durationUnit, profitRate, charityDeduction } = inputs;
+  const investmentAmount = Number(inputs.investmentAmount);
+  const duration = Number(inputs.duration);
+  const durationUnit = inputs.durationUnit;
+  const profitRate = Number(inputs.profitRate);
+  const charityDeduction = Number(inputs.charityDeduction);
   const totalMonths = durationUnit === 'years' ? duration * 12 : duration;
   const monthlyRate = profitRate / 100;
   
@@ -43,7 +47,10 @@ export const calculateOneTimeInvestment = (inputs: OneTimeInvestmentInputs): { r
 };
 
 export const calculateGoalPlanner = (inputs: GoalPlannerInputs): { results: CalculationResult[], summary: SummaryData } => {
-  const { targetMonthlyProfit, monthlyInvestment, profitRate, charityDeduction } = inputs;
+  const targetMonthlyProfit = Number(inputs.targetMonthlyProfit);
+  const monthlyInvestment = Number(inputs.monthlyInvestment);
+  const profitRate = Number(inputs.profitRate);
+  const charityDeduction = Number(inputs.charityDeduction);
   const monthlyRate = profitRate / 100;
 
   const results: CalculationResult[] = [];
@@ -94,7 +101,10 @@ export const calculateGoalPlanner = (inputs: GoalPlannerInputs): { results: Calc
 };
 
 export const calculateMonthlyInvestment = (inputs: MonthlyInvestmentInputs): { results: CalculationResult[], summary: SummaryData } => {
-  const { monthlyAmount, duration, profitRate, charityDeduction } = inputs;
+  const monthlyAmount = Number(inputs.monthlyAmount);
+  const duration = Number(inputs.duration);
+  const profitRate = Number(inputs.profitRate);
+  const charityDeduction = Number(inputs.charityDeduction);
   const monthlyRate = profitRate / 100;
 
   const results: CalculationResult[] = [];

@@ -4,7 +4,7 @@ import {
   MonthlyInvestmentInputs, 
   CalculationResult, 
   SummaryData 
-} from '../types';
+} from '../models/types';
 
 export const calculateOneTimeInvestment = (inputs: OneTimeInvestmentInputs): { results: CalculationResult[], summary: SummaryData } => {
   const { investmentAmount, duration, durationUnit, profitRate, charityDeduction } = inputs;

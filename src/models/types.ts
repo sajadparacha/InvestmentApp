@@ -1,23 +1,23 @@
 export interface OneTimeInvestmentInputs {
-  investmentAmount: number;
-  duration: number;
-  durationUnit: 'months' | 'years';
-  profitRate: number;
-  charityDeduction: number;
+  investmentAmount: string | number;
+  duration: string | number;
+  durationUnit: string;
+  profitRate: string | number;
+  charityDeduction: string | number;
 }
 
 export interface GoalPlannerInputs {
-  targetMonthlyProfit: number;
-  monthlyInvestment: number;
-  profitRate: number;
-  charityDeduction: number;
+  targetMonthlyProfit: string | number;
+  monthlyInvestment: string | number;
+  profitRate: string | number;
+  charityDeduction: string | number;
 }
 
 export interface MonthlyInvestmentInputs {
-  monthlyAmount: number;
-  duration: number;
-  profitRate: number;
-  charityDeduction: number;
+  monthlyAmount: string | number;
+  duration: string | number;
+  profitRate: string | number;
+  charityDeduction: string | number;
 }
 
 export interface CalculationResult {

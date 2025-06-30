@@ -1,4 +1,4 @@
-import { OneTimeInvestmentInputs, GoalPlannerInputs, MonthlyInvestmentInputs } from '../types';
+import { OneTimeInvestmentInputs, GoalPlannerInputs, MonthlyInvestmentInputs } from '../models/types';
 
 export interface ValidationError {
   field: string;
