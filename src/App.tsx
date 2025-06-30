@@ -4,6 +4,7 @@ import OneTimeInvestmentController from './controllers/OneTimeInvestmentControll
 import GoalPlannerController from './controllers/GoalPlannerController';
 import MonthlyInvestmentController from './controllers/MonthlyInvestmentController';
 import HelpGuide from './components/HelpGuide';
+import CreditsView from './views/CreditsView';
 import './index.css';
 
 const App: React.FC = () => {
@@ -29,6 +30,11 @@ const App: React.FC = () => {
       id: 3,
       name: 'Help & Guidance',
       icon: <HelpCircle className="w-5 h-5" />
+    },
+    {
+      id: 4,
+      name: 'Credits',
+      icon: <span className="w-5 h-5">©</span>
     }
   ];
 
@@ -94,6 +100,9 @@ const App: React.FC = () => {
           </div>
           <div style={{ display: activeTab === 3 ? 'block' : 'none' }}>
             <HelpGuide />
+          </div>
+          <div style={{ display: activeTab === 4 ? 'block' : 'none' }}>
+            <CreditsView />
           </div>
         </div>
       </main>
