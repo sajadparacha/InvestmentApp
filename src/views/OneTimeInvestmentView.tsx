@@ -189,7 +189,7 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
         <>
           {/* Summary Section */}
           <div className="card">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Investment Summary</h3>
+            <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">Investment Summary</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-blue-50 p-4 rounded-lg">
                 <div className="text-sm text-blue-600 font-medium">Total Investment</div>
@@ -271,7 +271,7 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
                 </button>
               </div>
             </div>
-            <div id="one-time-results-table" className="overflow-x-auto">
+            <div id="one-time-results-table" className="overflow-x-auto w-full">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>

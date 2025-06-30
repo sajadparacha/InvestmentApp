@@ -2,8 +2,8 @@ import React from 'react';
 
 const CreditsView: React.FC = () => (
   <div className="p-6 md:p-8 lg:p-10 flex flex-col items-center justify-center min-h-[60vh]">
-    <div className="card max-w-lg w-full text-center">
-      <h2 className="text-2xl font-bold mb-4 text-gray-900">Credits</h2>
+    <div className="card max-w-md w-full text-center p-4 md:p-8">
+      <h2 className="text-2xl md:text-3xl font-bold mb-4 text-gray-900">Credits</h2>
       <div className="space-y-2">
         <div>
           <span className="font-semibold text-gray-700">Developer:</span> Sajjad Paracha
