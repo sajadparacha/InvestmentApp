@@ -75,6 +75,7 @@ const App: React.FC = () => {
             >
               <option value="en">{t('langEnglish')}</option>
               <option value="ur">{t('langUrdu')}</option>
+              <option value="ar">{t('langArabic')}</option>
             </select>
           </div>
         </div>
