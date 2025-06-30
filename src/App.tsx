@@ -5,34 +5,50 @@ import GoalPlanner from './components/GoalPlanner';
 import MonthlyInvestment from './components/MonthlyInvestment';
 import HelpGuide from './components/HelpGuide';
 import './index.css';
+import { OneTimeInvestmentInputs, CalculationResult, SummaryData, GoalPlannerInputs, MonthlyInvestmentInputs } from './types';
+import { DEFAULT_ONE_TIME_INVESTMENT, DEFAULT_GOAL_PLANNER, DEFAULT_MONTHLY_INVESTMENT } from './constants/defaults';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState(0);
+
+  // One-Time Investment state
+  const [oneTimeInputs, setOneTimeInputs] = useState<OneTimeInvestmentInputs>(DEFAULT_ONE_TIME_INVESTMENT);
+  const [oneTimeResults, setOneTimeResults] = useState<CalculationResult[]>([]);
+  const [oneTimeSummary, setOneTimeSummary] = useState<SummaryData | null>(null);
+  const [oneTimeErrors, setOneTimeErrors] = useState<any[]>([]);
+
+  // Goal Planner state
+  const [goalPlannerInputs, setGoalPlannerInputs] = useState<GoalPlannerInputs>(DEFAULT_GOAL_PLANNER);
+  const [goalPlannerResults, setGoalPlannerResults] = useState<CalculationResult[]>([]);
+  const [goalPlannerSummary, setGoalPlannerSummary] = useState<SummaryData | null>(null);
+  const [goalPlannerErrors, setGoalPlannerErrors] = useState<any[]>([]);
+
+  // Monthly Investment state
+  const [monthlyInputs, setMonthlyInputs] = useState<MonthlyInvestmentInputs>(DEFAULT_MONTHLY_INVESTMENT);
+  const [monthlyResults, setMonthlyResults] = useState<CalculationResult[]>([]);
+  const [monthlySummary, setMonthlySummary] = useState<SummaryData | null>(null);
+  const [monthlyErrors, setMonthlyErrors] = useState<any[]>([]);
 
   const tabs = [
     {
       id: 0,
       name: 'One-Time Investment',
-      icon: <Calculator className="w-5 h-5" />,
-      component: <OneTimeInvestment />
+      icon: <Calculator className="w-5 h-5" />
     },
     {
       id: 1,
       name: 'Goal Planner',
-      icon: <Target className="w-5 h-5" />,
-      component: <GoalPlanner />
+      icon: <Target className="w-5 h-5" />
     },
     {
       id: 2,
       name: 'Monthly Investment',
-      icon: <Repeat className="w-5 h-5" />,
-      component: <MonthlyInvestment />
+      icon: <Repeat className="w-5 h-5" />
     },
     {
       id: 3,
       name: 'Help & Guidance',
-      icon: <HelpCircle className="w-5 h-5" />,
-      component: <HelpGuide />
+      icon: <HelpCircle className="w-5 h-5" />
     }
   ];
 
@@ -87,7 +103,45 @@ const App: React.FC = () => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-8">
-          {tabs[activeTab].component}
+          <div style={{ display: activeTab === 0 ? 'block' : 'none' }}>
+            <OneTimeInvestment
+              inputs={oneTimeInputs}
+              setInputs={setOneTimeInputs}
+              results={oneTimeResults}
+              setResults={setOneTimeResults}
+              summary={oneTimeSummary}
+              setSummary={setOneTimeSummary}
+              errors={oneTimeErrors}
+              setErrors={setOneTimeErrors}
+            />
+          </div>
+          <div style={{ display: activeTab === 1 ? 'block' : 'none' }}>
+            <GoalPlanner
+              inputs={goalPlannerInputs}
+              setInputs={setGoalPlannerInputs}
+              results={goalPlannerResults}
+              setResults={setGoalPlannerResults}
+              summary={goalPlannerSummary}
+              setSummary={setGoalPlannerSummary}
+              errors={goalPlannerErrors}
+              setErrors={setGoalPlannerErrors}
+            />
+          </div>
+          <div style={{ display: activeTab === 2 ? 'block' : 'none' }}>
+            <MonthlyInvestment
+              inputs={monthlyInputs}
+              setInputs={setMonthlyInputs}
+              results={monthlyResults}
+              setResults={setMonthlyResults}
+              summary={monthlySummary}
+              setSummary={setMonthlySummary}
+              errors={monthlyErrors}
+              setErrors={setMonthlyErrors}
+            />
+          </div>
+          <div style={{ display: activeTab === 3 ? 'block' : 'none' }}>
+            <HelpGuide />
+          </div>
         </div>
       </main>
 

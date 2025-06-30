@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { Repeat, Calendar, TrendingUp, Heart } from 'lucide-react';
 import { MonthlyInvestmentInputs, CalculationResult, SummaryData } from '../types';
@@ -8,63 +7,79 @@ import { validateMonthlyInvestment, getErrorMessage } from '../utils/validation'
 import { exportToCSV, exportToExcel, exportToPDF, exportChartToPNG } from '../utils/export';
 import { DEFAULT_MONTHLY_INVESTMENT } from '../constants/defaults';
 
-const MonthlyInvestment: React.FC = () => {
-  const [results, setResults] = useState<CalculationResult[]>([]);
-  const [summary, setSummary] = useState<SummaryData | null>(null);
-  const [errors, setErrors] = useState<any[]>([]);
-  
-  const { register, handleSubmit, watch } = useForm<MonthlyInvestmentInputs>({
-    defaultValues: DEFAULT_MONTHLY_INVESTMENT
-  });
-  
-  const watchedValues = watch();
-  
-  const onSubmit = (data: MonthlyInvestmentInputs) => {
-    const validationErrors = validateMonthlyInvestment(data);
+interface MonthlyInvestmentProps {
+  inputs: MonthlyInvestmentInputs;
+  setInputs: React.Dispatch<React.SetStateAction<MonthlyInvestmentInputs>>;
+  results: CalculationResult[];
+  setResults: React.Dispatch<React.SetStateAction<CalculationResult[]>>;
+  summary: SummaryData | null;
+  setSummary: React.Dispatch<React.SetStateAction<SummaryData | null>>;
+  errors: any[];
+  setErrors: React.Dispatch<React.SetStateAction<any[]>>;
+}
+
+const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
+  inputs,
+  setInputs,
+  results,
+  setResults,
+  summary,
+  setSummary,
+  errors,
+  setErrors
+}) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type } = e.target;
+    setInputs((prev) => ({
+      ...prev,
+      [name]: type === 'number' || type === 'range' ? Number(value) : value
+    }));
+  };
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const validationErrors = validateMonthlyInvestment(inputs);
     setErrors(validationErrors);
-    
     if (validationErrors.length === 0) {
-      const { results: calcResults, summary: calcSummary } = calculateMonthlyInvestment(data);
+      const { results: calcResults, summary: calcSummary } = calculateMonthlyInvestment(inputs);
       setResults(calcResults);
       setSummary(calcSummary);
     }
   };
-  
+
   const handleExport = (format: 'csv' | 'xlsx' | 'pdf') => {
     if (results.length === 0) return;
     const filename = `monthly-investment-${new Date().toISOString().split('T')[0]}`;
-    const inputs = watchedValues;
+    const inputValues = inputs;
     switch (format) {
       case 'csv':
-        exportToCSV(results, filename, inputs, summary || undefined);
+        exportToCSV(results, filename, inputValues, summary || undefined);
         break;
       case 'xlsx':
-        exportToExcel(results, filename, inputs, summary || undefined);
+        exportToExcel(results, filename, inputValues, summary || undefined);
         break;
       case 'pdf':
-        exportToPDF('monthly-results-table', filename, inputs, summary || undefined);
+        exportToPDF('monthly-results-table', filename, inputValues, summary || undefined);
         break;
     }
   };
-  
+
   const handleChartExport = () => {
     exportChartToPNG('monthly-chart', `monthly-chart-${new Date().toISOString().split('T')[0]}`);
   };
-  
+
   const getPieChartData = () => {
     if (!summary) return [];
-    
     const totalInvested = results.reduce((sum, result) => sum + (result.monthlyInvestment || 0), 0);
     const totalProfit = summary.totalProfit;
     const totalCharity = summary.totalCharity;
-    
     return [
       { name: 'Capital Invested', value: totalInvested, color: '#3b82f6' },
       { name: 'Total Profit', value: totalProfit, color: '#10b981' },
       { name: 'Total Charity', value: totalCharity, color: '#f59e0b' }
     ];
   };
-  
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -75,10 +90,9 @@ const MonthlyInvestment: React.FC = () => {
           <p className="text-gray-600">Calculate growth of monthly recurring investments with optional deductions</p>
         </div>
       </div>
-      
       {/* Input Form */}
       <div className="card">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={onSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -90,51 +104,52 @@ const MonthlyInvestment: React.FC = () => {
                   step="0.01"
                   className="input-field"
                   placeholder="1000"
-                  {...register('monthlyAmount', { valueAsNumber: true })}
+                  name="monthlyAmount"
+                  value={inputs.monthlyAmount}
+                  onChange={handleInputChange}
                 />
               </div>
               {getErrorMessage(errors, 'monthlyAmount') && (
                 <p className="text-red-500 text-sm mt-1">{getErrorMessage(errors, 'monthlyAmount')}</p>
               )}
             </div>
-            
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Duration (Months)
               </label>
               <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="number"
                   className="input-field pl-10"
                   placeholder="12"
-                  {...register('duration', { valueAsNumber: true })}
+                  name="duration"
+                  value={inputs.duration}
+                  onChange={handleInputChange}
                 />
               </div>
               {getErrorMessage(errors, 'duration') && (
                 <p className="text-red-500 text-sm mt-1">{getErrorMessage(errors, 'duration')}</p>
               )}
             </div>
-            
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Profit Rate (%)
               </label>
               <div className="relative">
-                <TrendingUp className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="number"
                   step="0.01"
                   className="input-field pl-10"
                   placeholder="8.00"
-                  {...register('profitRate', { valueAsNumber: true })}
+                  name="profitRate"
+                  value={inputs.profitRate}
+                  onChange={handleInputChange}
                 />
               </div>
               {getErrorMessage(errors, 'profitRate') && (
                 <p className="text-red-500 text-sm mt-1">{getErrorMessage(errors, 'profitRate')}</p>
               )}
             </div>
-            
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Charity Deduction (%)
@@ -147,7 +162,9 @@ const MonthlyInvestment: React.FC = () => {
                   step="0.1"
                   className="input-field"
                   placeholder="1-100"
-                  {...register('charityDeduction', { valueAsNumber: true })}
+                  name="charityDeduction"
+                  value={inputs.charityDeduction}
+                  onChange={handleInputChange}
                 />
               </div>
               {getErrorMessage(errors, 'charityDeduction') && (
@@ -155,13 +172,11 @@ const MonthlyInvestment: React.FC = () => {
               )}
             </div>
           </div>
-          
           <button type="submit" className="btn-primary w-full md:w-auto">
             Calculate Monthly Investment
           </button>
         </form>
       </div>
-      
       {/* Results */}
       {results.length > 0 && (
         <>
@@ -195,7 +210,6 @@ const MonthlyInvestment: React.FC = () => {
               </div>
             </div>
           </div>
-          
           {/* Chart */}
           <div className="card">
             <div className="flex justify-between items-center mb-4">
@@ -227,7 +241,6 @@ const MonthlyInvestment: React.FC = () => {
               </ResponsiveContainer>
             </div>
           </div>
-          
           {/* Results Table */}
           <div className="card">
             <div className="flex justify-between items-center mb-4">

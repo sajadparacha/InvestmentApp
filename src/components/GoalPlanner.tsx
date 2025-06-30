@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Target, TrendingUp } from 'lucide-react';
 import { GoalPlannerInputs, CalculationResult, SummaryData } from '../types';
@@ -8,47 +7,67 @@ import { validateGoalPlanner, getErrorMessage } from '../utils/validation';
 import { exportToCSV, exportToExcel, exportToPDF, exportChartToPNG } from '../utils/export';
 import { DEFAULT_GOAL_PLANNER } from '../constants/defaults';
 
-const GoalPlanner: React.FC = () => {
-  const [results, setResults] = useState<CalculationResult[]>([]);
-  const [summary, setSummary] = useState<SummaryData | null>(null);
-  const [errors, setErrors] = useState<any[]>([]);
-  
-  const { register, handleSubmit, watch } = useForm<GoalPlannerInputs>({
-    defaultValues: DEFAULT_GOAL_PLANNER
-  });
-  
-  const onSubmit = (data: GoalPlannerInputs) => {
-    const validationErrors = validateGoalPlanner(data);
+interface GoalPlannerProps {
+  inputs: GoalPlannerInputs;
+  setInputs: React.Dispatch<React.SetStateAction<GoalPlannerInputs>>;
+  results: CalculationResult[];
+  setResults: React.Dispatch<React.SetStateAction<CalculationResult[]>>;
+  summary: SummaryData | null;
+  setSummary: React.Dispatch<React.SetStateAction<SummaryData | null>>;
+  errors: any[];
+  setErrors: React.Dispatch<React.SetStateAction<any[]>>;
+}
+
+const GoalPlanner: React.FC<GoalPlannerProps> = ({
+  inputs,
+  setInputs,
+  results,
+  setResults,
+  summary,
+  setSummary,
+  errors,
+  setErrors
+}) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type } = e.target;
+    setInputs((prev) => ({
+      ...prev,
+      [name]: type === 'number' || type === 'range' ? Number(value) : value
+    }));
+  };
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const validationErrors = validateGoalPlanner(inputs);
     setErrors(validationErrors);
-    
     if (validationErrors.length === 0) {
-      const { results: calcResults, summary: calcSummary } = calculateGoalPlanner(data);
+      const { results: calcResults, summary: calcSummary } = calculateGoalPlanner(inputs);
       setResults(calcResults);
       setSummary(calcSummary);
     }
   };
-  
+
   const handleExport = (format: 'csv' | 'xlsx' | 'pdf') => {
     if (results.length === 0) return;
     const filename = `goal-planner-${new Date().toISOString().split('T')[0]}`;
-    const inputs = watch();
+    const inputValues = inputs;
     switch (format) {
       case 'csv':
-        exportToCSV(results, filename, inputs, summary || undefined);
+        exportToCSV(results, filename, inputValues, summary || undefined);
         break;
       case 'xlsx':
-        exportToExcel(results, filename, inputs, summary || undefined);
+        exportToExcel(results, filename, inputValues, summary || undefined);
         break;
       case 'pdf':
-        exportToPDF('goal-results-table', filename, inputs, summary || undefined);
+        exportToPDF('goal-results-table', filename, inputValues, summary || undefined);
         break;
     }
   };
-  
+
   const handleChartExport = () => {
     exportChartToPNG('goal-chart', `goal-chart-${new Date().toISOString().split('T')[0]}`);
   };
-  
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -59,10 +78,9 @@ const GoalPlanner: React.FC = () => {
           <p className="text-gray-600">Calculate required monthly investment to reach your financial goal</p>
         </div>
       </div>
-      
       {/* Input Form */}
       <div className="card">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={onSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -74,7 +92,9 @@ const GoalPlanner: React.FC = () => {
                   step="0.01"
                   className="input-field"
                   placeholder="1000"
-                  {...register('targetMonthlyProfit', { valueAsNumber: true })}
+                  name="targetMonthlyProfit"
+                  value={inputs.targetMonthlyProfit}
+                  onChange={handleInputChange}
                 />
               </div>
               {getErrorMessage(errors, 'targetMonthlyProfit') && (
@@ -91,7 +111,9 @@ const GoalPlanner: React.FC = () => {
                   step="0.01"
                   className="input-field"
                   placeholder="500"
-                  {...register('monthlyInvestment', { valueAsNumber: true })}
+                  name="monthlyInvestment"
+                  value={inputs.monthlyInvestment}
+                  onChange={handleInputChange}
                 />
               </div>
               {getErrorMessage(errors, 'monthlyInvestment') && (
@@ -108,7 +130,9 @@ const GoalPlanner: React.FC = () => {
                   step="0.01"
                   className="input-field"
                   placeholder="8.00"
-                  {...register('profitRate', { valueAsNumber: true })}
+                  name="profitRate"
+                  value={inputs.profitRate}
+                  onChange={handleInputChange}
                 />
               </div>
               {getErrorMessage(errors, 'profitRate') && (
@@ -127,7 +151,9 @@ const GoalPlanner: React.FC = () => {
                   step="0.1"
                   className="input-field"
                   placeholder="1-100"
-                  {...register('charityDeduction', { valueAsNumber: true })}
+                  name="charityDeduction"
+                  value={inputs.charityDeduction}
+                  onChange={handleInputChange}
                 />
               </div>
               {getErrorMessage(errors, 'charityDeduction') && (
@@ -135,13 +161,11 @@ const GoalPlanner: React.FC = () => {
               )}
             </div>
           </div>
-          
           <button type="submit" className="btn-primary w-full md:w-auto">
             Calculate Required Investment
           </button>
         </form>
       </div>
-      
       {/* Results */}
       {results.length > 0 && (
         <>
@@ -180,7 +204,6 @@ const GoalPlanner: React.FC = () => {
               </div>
             )}
           </div>
-          
           {/* Chart */}
           <div className="card">
             <div className="flex justify-between items-center mb-4">
@@ -219,7 +242,6 @@ const GoalPlanner: React.FC = () => {
               </ResponsiveContainer>
             </div>
           </div>
-          
           {/* Results Table */}
           <div className="card">
             <div className="flex justify-between items-center mb-4">
