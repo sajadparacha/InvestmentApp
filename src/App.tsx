@@ -5,17 +5,9 @@ import GoalPlannerController from './controllers/GoalPlannerController';
 import MonthlyInvestmentController from './controllers/MonthlyInvestmentController';
 import HelpGuide from './components/HelpGuide';
 import './index.css';
-import { OneTimeInvestmentInputs, CalculationResult, SummaryData, GoalPlannerInputs, MonthlyInvestmentInputs } from './types';
-import { DEFAULT_ONE_TIME_INVESTMENT, DEFAULT_GOAL_PLANNER, DEFAULT_MONTHLY_INVESTMENT } from './constants/defaults';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState(0);
-
-  // One-Time Investment state
-  const [oneTimeInputs, setOneTimeInputs] = useState<OneTimeInvestmentInputs>(DEFAULT_ONE_TIME_INVESTMENT);
-  const [oneTimeResults, setOneTimeResults] = useState<CalculationResult[]>([]);
-  const [oneTimeSummary, setOneTimeSummary] = useState<SummaryData | null>(null);
-  const [oneTimeErrors, setOneTimeErrors] = useState<any[]>([]);
 
   const tabs = [
     {
