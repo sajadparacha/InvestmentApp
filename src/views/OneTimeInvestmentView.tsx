@@ -179,7 +179,7 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
           <button type="submit" className="btn-primary w-full md:w-auto">
             Calculate Investment
           </button>
-          <button type="button" className="btn-secondary w-full md:w-auto ml-2" onClick={handleClear}>
+          <button type="button" className="btn-primary w-full md:w-auto ml-2" onClick={handleClear}>
             Clear
           </button>
         </form>
