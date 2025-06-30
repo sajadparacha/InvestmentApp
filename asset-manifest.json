@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/InvestmentApp/static/css/main.44d871bc.css",
+    "main.js": "/InvestmentApp/static/js/main.3de01450.js",
+    "static/js/213.dc171899.chunk.js": "/InvestmentApp/static/js/213.dc171899.chunk.js",
+    "static/js/455.ddba0009.chunk.js": "/InvestmentApp/static/js/455.ddba0009.chunk.js",
+    "index.html": "/InvestmentApp/index.html",
+    "main.44d871bc.css.map": "/InvestmentApp/static/css/main.44d871bc.css.map",
+    "main.3de01450.js.map": "/InvestmentApp/static/js/main.3de01450.js.map",
+    "213.dc171899.chunk.js.map": "/InvestmentApp/static/js/213.dc171899.chunk.js.map",
+    "455.ddba0009.chunk.js.map": "/InvestmentApp/static/js/455.ddba0009.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.44d871bc.css",
+    "static/js/main.3de01450.js"
+  ]
+}
