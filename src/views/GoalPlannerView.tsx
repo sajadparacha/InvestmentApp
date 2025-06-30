@@ -93,17 +93,15 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Target Monthly Profit (after charity)
               </label>
-              <div className="relative">
-                <input
-                  type="number"
-                  step="0.01"
-                  className="input-field"
-                  placeholder="1000"
-                  name="targetMonthlyProfit"
-                  value={inputs.targetMonthlyProfit}
-                  onChange={handleInputChange}
-                />
-              </div>
+              <input
+                type="number"
+                step="0.01"
+                className="input-field"
+                placeholder="1000"
+                name="targetMonthlyProfit"
+                value={inputs.targetMonthlyProfit}
+                onChange={handleInputChange}
+              />
               {getErrorMessage(errors, 'targetMonthlyProfit') && (
                 <p className="text-red-500 text-sm mt-1">{getErrorMessage(errors, 'targetMonthlyProfit')}</p>
               )}
@@ -112,17 +110,15 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Monthly Investment Amount
               </label>
-              <div className="relative">
-                <input
-                  type="number"
-                  step="0.01"
-                  className="input-field"
-                  placeholder="500"
-                  name="monthlyInvestment"
-                  value={inputs.monthlyInvestment}
-                  onChange={handleInputChange}
-                />
-              </div>
+              <input
+                type="number"
+                step="0.01"
+                className="input-field"
+                placeholder="500"
+                name="monthlyInvestment"
+                value={inputs.monthlyInvestment}
+                onChange={handleInputChange}
+              />
               {getErrorMessage(errors, 'monthlyInvestment') && (
                 <p className="text-red-500 text-sm mt-1">{getErrorMessage(errors, 'monthlyInvestment')}</p>
               )}
@@ -131,17 +127,15 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Profit Rate (% per month)
               </label>
-              <div className="relative">
-                <input
-                  type="number"
-                  step="0.01"
-                  className="input-field"
-                  placeholder="8.00"
-                  name="profitRate"
-                  value={inputs.profitRate}
-                  onChange={handleInputChange}
-                />
-              </div>
+              <input
+                type="number"
+                step="0.01"
+                className="input-field"
+                placeholder="8.00"
+                name="profitRate"
+                value={inputs.profitRate}
+                onChange={handleInputChange}
+              />
               {getErrorMessage(errors, 'profitRate') && (
                 <p className="text-red-500 text-sm mt-1">{getErrorMessage(errors, 'profitRate')}</p>
               )}
@@ -150,19 +144,17 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Charity Deduction (%)
               </label>
-              <div className="relative">
-                <input
-                  type="number"
-                  min="1"
-                  max="100"
-                  step="0.1"
-                  className="input-field"
-                  placeholder="1-100"
-                  name="charityDeduction"
-                  value={inputs.charityDeduction}
-                  onChange={handleInputChange}
-                />
-              </div>
+              <input
+                type="number"
+                min="1"
+                max="100"
+                step="0.1"
+                className="input-field"
+                placeholder="1-100"
+                name="charityDeduction"
+                value={inputs.charityDeduction}
+                onChange={handleInputChange}
+              />
               {getErrorMessage(errors, 'charityDeduction') && (
                 <p className="text-red-500 text-sm mt-1">{getErrorMessage(errors, 'charityDeduction')}</p>
               )}
