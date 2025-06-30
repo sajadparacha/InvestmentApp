@@ -29,6 +29,7 @@ export interface CalculationResult {
   monthlyInvestment?: number;
   totalInvested?: number;
   totalReturn?: number;
+  totalCharity?: number;
 }
 
 export interface SummaryData {
