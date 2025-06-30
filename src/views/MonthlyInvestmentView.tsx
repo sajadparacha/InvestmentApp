@@ -5,6 +5,7 @@ import { MonthlyInvestmentInputs, CalculationResult, SummaryData } from '../mode
 import { calculateMonthlyInvestment, formatCurrency } from '../models/calculations';
 import { validateMonthlyInvestment, getErrorMessage } from '../models/validation';
 import { exportToCSV, exportToExcel, exportToPDF, exportChartToPNG } from '../utils/export';
+import { DEFAULT_MONTHLY_INVESTMENT } from '../constants/defaults';
 
 interface MonthlyInvestmentProps {
   inputs: MonthlyInvestmentInputs;
@@ -77,6 +78,13 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
       { name: 'Total Profit', value: totalProfit, color: '#10b981' },
       { name: 'Total Charity', value: totalCharity, color: '#f59e0b' }
     ];
+  };
+
+  const handleClear = () => {
+    setInputs(DEFAULT_MONTHLY_INVESTMENT);
+    setResults([]);
+    setSummary(null);
+    setErrors([]);
   };
 
   return (
@@ -173,6 +181,9 @@ const MonthlyInvestment: React.FC<MonthlyInvestmentProps> = ({
           </div>
           <button type="submit" className="btn-primary w-full md:w-auto">
             Calculate Monthly Investment
+          </button>
+          <button type="button" className="btn-secondary w-full md:w-auto ml-2" onClick={handleClear}>
+            Clear
           </button>
         </form>
       </div>

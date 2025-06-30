@@ -5,6 +5,7 @@ import { OneTimeInvestmentInputs, CalculationResult, SummaryData } from '../mode
 import { calculateOneTimeInvestment, formatCurrency } from '../models/calculations';
 import { validateOneTimeInvestment, getErrorMessage } from '../models/validation';
 import { exportToCSV, exportToExcel, exportToPDF, exportChartToPNG } from '../utils/export';
+import { DEFAULT_ONE_TIME_INVESTMENT } from '../constants/defaults';
 
 interface OneTimeInvestmentProps {
   inputs: OneTimeInvestmentInputs;
@@ -65,6 +66,13 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
 
   const handleChartExport = () => {
     exportChartToPNG('one-time-chart', `one-time-chart-${new Date().toISOString().split('T')[0]}`);
+  };
+
+  const handleClear = () => {
+    setInputs(DEFAULT_ONE_TIME_INVESTMENT);
+    setResults([]);
+    setSummary(null);
+    setErrors([]);
   };
 
   return (
@@ -170,6 +178,9 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
           </div>
           <button type="submit" className="btn-primary w-full md:w-auto">
             Calculate Investment
+          </button>
+          <button type="button" className="btn-secondary w-full md:w-auto ml-2" onClick={handleClear}>
+            Clear
           </button>
         </form>
       </div>

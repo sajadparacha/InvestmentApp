@@ -5,6 +5,7 @@ import { GoalPlannerInputs, CalculationResult, SummaryData } from '../models/typ
 import { calculateGoalPlanner, formatCurrency } from '../models/calculations';
 import { validateGoalPlanner, getErrorMessage } from '../models/validation';
 import { exportToCSV, exportToExcel, exportToPDF, exportChartToPNG } from '../utils/export';
+import { DEFAULT_GOAL_PLANNER } from '../constants/defaults';
 
 interface GoalPlannerProps {
   inputs: GoalPlannerInputs;
@@ -65,6 +66,13 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
 
   const handleChartExport = () => {
     exportChartToPNG('goal-chart', `goal-chart-${new Date().toISOString().split('T')[0]}`);
+  };
+
+  const handleClear = () => {
+    setInputs(DEFAULT_GOAL_PLANNER);
+    setResults([]);
+    setSummary(null);
+    setErrors([]);
   };
 
   return (
@@ -162,6 +170,9 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
           </div>
           <button type="submit" className="btn-primary w-full md:w-auto">
             Calculate Required Investment
+          </button>
+          <button type="button" className="btn-secondary w-full md:w-auto ml-2" onClick={handleClear}>
+            Clear
           </button>
         </form>
       </div>
