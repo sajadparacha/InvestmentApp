@@ -176,28 +176,28 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
         <>
           {/* Summary Section */}
           <div className="card">
-            <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">Investment Summary</h3>
+            <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">{t('investmentSummary')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-blue-50 p-4 rounded-lg">
-                <div className="text-sm text-blue-600 font-medium">Total Investment</div>
+                <div className="text-sm text-blue-600 font-medium">{t('totalInvestment')}</div>
                 <div className="text-2xl font-bold text-blue-700">
                   {formatCurrency(summary?.totalInvestment || 0)}
                 </div>
               </div>
               <div className="bg-green-50 p-4 rounded-lg">
-                <div className="text-sm text-green-600 font-medium">Total Profit</div>
+                <div className="text-sm text-green-600 font-medium">{t('totalProfit')}</div>
                 <div className="text-2xl font-bold text-green-700">
                   {formatCurrency(summary?.totalProfit || 0)}
                 </div>
               </div>
               <div className="bg-yellow-50 p-4 rounded-lg">
-                <div className="text-sm text-yellow-600 font-medium">Total Charity</div>
+                <div className="text-sm text-yellow-600 font-medium">{t('totalCharity')}</div>
                 <div className="text-2xl font-bold text-yellow-700">
                   {formatCurrency(summary?.totalCharity || 0)}
                 </div>
               </div>
               <div className="bg-purple-50 p-4 rounded-lg">
-                <div className="text-sm text-purple-600 font-medium">Final Value</div>
+                <div className="text-sm text-purple-600 font-medium">{t('finalValue')}</div>
                 <div className="text-2xl font-bold text-purple-700">
                   {formatCurrency(summary?.finalValue || 0)}
                 </div>
@@ -205,16 +205,23 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
             </div>
             {summary?.feasibilityMessage && (
               <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <p className="text-sm text-yellow-800">{summary.feasibilityMessage}</p>
+                <p className="text-sm text-yellow-800">
+                  {summary.feasibilityMessage.startsWith('goalPlannerSuccessMessage:') 
+                    ? t('goalPlannerSuccessMessage', { 
+                        months: summary.feasibilityMessage.split(':')[1] 
+                      })
+                    : t(summary.feasibilityMessage)
+                  }
+                </p>
               </div>
             )}
           </div>
           {/* Chart */}
           <div className="card">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Monthly Investment, Profit, and Charity</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{t('monthlyInvestmentProfitCharity')}</h3>
               <button onClick={handleChartExport} className="btn-secondary text-sm">
-                Export PNG
+                {t('exportPNG')}
               </button>
             </div>
             <div id="goal-chart" className="h-80">
@@ -231,18 +238,18 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
                       const investmentValue = payload[0]?.payload?.accumulatedValue;
                       return (
                         <div className="bg-white p-3 rounded-lg shadow text-xs text-gray-800">
-                          <div className="font-semibold mb-1">Month {label}</div>
-                          <div>Profit: <span className="font-bold">{formatCurrency(monthlyProfit ?? 0)}</span></div>
-                          <div>Charity: <span className="font-bold">{formatCurrency(monthlyCharity ?? 0)}</span></div>
-                          <div>Investment Value: <span className="font-bold">{formatCurrency(investmentValue ?? 0)}</span></div>
+                          <div className="font-semibold mb-1">{t('month')} {label}</div>
+                          <div>{t('profit')}: <span className="font-bold">{formatCurrency(monthlyProfit ?? 0)}</span></div>
+                          <div>{t('charity')}: <span className="font-bold">{formatCurrency(monthlyCharity ?? 0)}</span></div>
+                          <div>{t('investmentValue')}: <span className="font-bold">{formatCurrency(investmentValue ?? 0)}</span></div>
                         </div>
                       );
                     }}
                   />
                   <Legend />
-                  <Bar dataKey="accumulatedValue" fill="#3b82f6" name="Investment Value" />
-                  <Bar dataKey="totalProfit" fill="#10b981" name="Cumulative Profit" />
-                  <Bar dataKey="totalCharity" fill="#f59e0b" name="Cumulative Charity" />
+                  <Bar dataKey="accumulatedValue" fill="#3b82f6" name={t('investmentValue')} />
+                  <Bar dataKey="totalProfit" fill="#10b981" name={t('cumulativeProfit')} />
+                  <Bar dataKey="totalCharity" fill="#f59e0b" name={t('cumulativeCharity')} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -250,16 +257,16 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
           {/* Results Table */}
           <div className="card">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Monthly Breakdown</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{t('monthlyBreakdown')}</h3>
               <div className="space-x-2">
                 <button onClick={() => handleExport('csv')} className="btn-secondary text-sm">
-                  Export CSV
+                  {t('exportCSV')}
                 </button>
                 <button onClick={() => handleExport('xlsx')} className="btn-secondary text-sm">
-                  Export Excel
+                  {t('exportExcel')}
                 </button>
                 <button onClick={() => handleExport('pdf')} className="btn-secondary text-sm">
-                  Export PDF
+                  {t('exportPDF')}
                 </button>
               </div>
             </div>
@@ -267,21 +274,11 @@ const GoalPlanner: React.FC<GoalPlannerProps> = ({
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Month
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Monthly Investment
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Profit
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Charity
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Investment Value
-                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('month')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('monthlyInvestment')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('profit')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('charity')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('investmentValue')}</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">

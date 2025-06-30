@@ -92,8 +92,8 @@ export const calculateGoalPlanner = (inputs: GoalPlannerInputs): { results: Calc
     finalValue: currentValue,
     requiredMonthlyInvestment: monthlyInvestment,
     feasibilityMessage: achieved
-      ? `You will reach your target monthly profit after charity in ${achievedMonth} months.`
-      : 'Target not reached within 1000 months.',
+      ? `goalPlannerSuccessMessage:${achievedMonth}`
+      : 'goalPlannerFailureMessage',
     totalInvestment: totalInvested
   };
 

@@ -48,13 +48,13 @@ const HelpGuide: React.FC = () => {
         <HelpCircle className="w-8 h-8 text-primary-600" />
         <div>
           <h2 className="text-2xl font-bold text-gray-900">{t('help')}</h2>
-          <p className="text-gray-600">Learn how to use the InvestmentApp effectively</p>
+          <p className="text-gray-600">{t('helpIntro')}</p>
         </div>
       </div>
 
       {/* Help Content */}
       <div className="space-y-6">
-        <AccordionItem title="Module Descriptions" icon={<BookOpen className="w-5 h-5 text-primary-600" />}>
+        <AccordionItem title={t('moduleDescriptions')} icon={<BookOpen className="w-5 h-5 text-primary-600" />}>
           <div className="space-y-4">
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">{t('oneTimeInvestmentCalculator')}</h4>
@@ -79,7 +79,7 @@ const HelpGuide: React.FC = () => {
           </div>
         </AccordionItem>
 
-        <AccordionItem title="Step-by-Step Usage Guide" icon={<MessageCircle className="w-5 h-5 text-primary-600" />}>
+        <AccordionItem title={t('stepByStepGuide')} icon={<MessageCircle className="w-5 h-5 text-primary-600" />}>
           <div className="space-y-4">
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">{t('gettingStarted')}</h4>
@@ -105,7 +105,7 @@ const HelpGuide: React.FC = () => {
           </div>
         </AccordionItem>
 
-        <AccordionItem title="Sample Use Cases" icon={<BarChart3 className="w-5 h-5 text-primary-600" />}>
+        <AccordionItem title={t('sampleUseCases')} icon={<BarChart3 className="w-5 h-5 text-primary-600" />}>
           <div className="space-y-4">
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">{t('oneTimeInvestmentExample')}</h4>
@@ -150,7 +150,7 @@ const HelpGuide: React.FC = () => {
           </div>
         </AccordionItem>
 
-        <AccordionItem title="Frequently Asked Questions" icon={<HelpCircle className="w-5 h-5 text-primary-600" />}>
+        <AccordionItem title={t('faq')} icon={<HelpCircle className="w-5 h-5 text-primary-600" />}>
           <div className="space-y-4">
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">{t('generalQuestions')}</h4>
@@ -192,7 +192,7 @@ const HelpGuide: React.FC = () => {
           </div>
         </AccordionItem>
 
-        <AccordionItem title="Chart Interpretation" icon={<BarChart3 className="w-5 h-5 text-primary-600" />}>
+        <AccordionItem title={t('chartInterpretation')} icon={<BarChart3 className="w-5 h-5 text-primary-600" />}>
           <div className="space-y-4">
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">{t('barCharts')}</h4>
