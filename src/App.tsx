@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calculator, Target, Repeat, HelpCircle } from 'lucide-react';
 import OneTimeInvestmentController from './controllers/OneTimeInvestmentController';
 import GoalPlannerController from './controllers/GoalPlannerController';
@@ -8,13 +8,34 @@ import CreditsView from './views/CreditsView';
 import './index.css';
 import './i18n';
 import { useTranslation } from 'react-i18next';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useParams,
+  useNavigate,
+  Navigate
+} from 'react-router-dom';
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState(0);
   const { t, i18n } = useTranslation();
+  const { lng } = useParams();
+  const navigate = useNavigate();
+
+  // Sync i18n language with URL param
+  useEffect(() => {
+    if (lng && i18n.language !== lng) {
+      i18n.changeLanguage(lng);
+    }
+    // eslint-disable-next-line
+  }, [lng]);
 
   const handleLangChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    i18n.changeLanguage(e.target.value);
+    const newLang = e.target.value;
+    if (newLang !== lng) {
+      navigate(`/${newLang}`);
+    }
   };
 
   const tabs = [
@@ -133,6 +154,17 @@ const App: React.FC = () => {
         </div>
       </footer>
     </div>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/en" replace />} />
+        <Route path=":lng" element={<AppContent />} />
+      </Routes>
+    </Router>
   );
 };
 
