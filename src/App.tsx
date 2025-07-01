@@ -22,11 +22,15 @@ const AppContent: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { lng } = useParams();
   const navigate = useNavigate();
+  const [isLangReady, setIsLangReady] = useState(false);
 
-  // Sync i18n language with URL param
+  // Sync i18n language with URL param and wait for it to be ready
   useEffect(() => {
     if (lng && i18n.language !== lng) {
-      i18n.changeLanguage(lng);
+      setIsLangReady(false);
+      i18n.changeLanguage(lng, () => setIsLangReady(true));
+    } else {
+      setIsLangReady(true);
     }
     // eslint-disable-next-line
   }, [lng]);
@@ -65,6 +69,10 @@ const AppContent: React.FC = () => {
       icon: <span className="w-5 h-5">©</span>
     }
   ];
+
+  if (!isLangReady) {
+    return <div className="flex justify-center items-center min-h-screen text-lg">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
