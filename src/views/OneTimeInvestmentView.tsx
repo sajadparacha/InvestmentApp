@@ -224,7 +224,7 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
           <div className="card">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-gray-900">{t('monthlyInvestmentProfitCharity')}</h3>
-              <button onClick={handleChartExport} className="btn-secondary text-sm">
+              <button onClick={handleChartExport} className="btn-primary text-sm">
                 {t('exportPNG')}
               </button>
             </div>
@@ -263,14 +263,14 @@ const OneTimeInvestment: React.FC<OneTimeInvestmentProps> = ({
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-gray-900">{t('monthlyBreakdown')}</h3>
               <div className="space-x-2">
-                <button onClick={() => handleExport('csv')} className="btn-secondary text-sm">
-                  Export CSV
+                <button onClick={() => handleExport('csv')} className="btn-primary text-sm">
+                  {t('exportCSV')}
                 </button>
-                <button onClick={() => handleExport('xlsx')} className="btn-secondary text-sm">
-                  Export Excel
+                <button onClick={() => handleExport('xlsx')} className="btn-primary text-sm">
+                  {t('exportExcel')}
                 </button>
-                <button onClick={() => handleExport('pdf')} className="btn-secondary text-sm">
-                  Export PDF
+                <button onClick={() => handleExport('pdf')} className="btn-primary text-sm">
+                  {t('exportPDF')}
                 </button>
               </div>
             </div>
