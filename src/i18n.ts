@@ -126,6 +126,9 @@ const resources = {
       // Goal Planner messages
       goalPlannerSuccessMessage: 'You will reach your target monthly profit after charity in {{months}} months.',
       goalPlannerFailureMessage: 'Target not reached within 1000 months.',
+      // Tab descriptions
+      helpDesc: 'Find guidance, tips, and answers to common questions about using the app.',
+      creditsDesc: 'See acknowledgments, developer info, and open source attributions for this project.',
       // ...add more as needed
     }
   },
@@ -253,6 +256,9 @@ const resources = {
       // Goal Planner messages
       goalPlannerSuccessMessage: 'آپ خیرات کے بعد اپنے ہدف ماہانہ منافع تک {{months}} مہینوں میں پہنچ جائیں گے۔',
       goalPlannerFailureMessage: '1000 مہینوں کے اندر ہدف حاصل نہیں ہوا۔',
+      // Tab descriptions
+      helpDesc: 'ایپ کے استعمال کے بارے میں رہنمائی، تجاویز اور عام سوالات کے جوابات حاصل کریں۔',
+      creditsDesc: 'اس پروجیکٹ کے لیے شکریہ، ڈویلپر کی معلومات، اور اوپن سورس انتسابات دیکھیں۔',
       // ...add more as needed
     }
   },
@@ -383,6 +389,9 @@ const resources = {
       // Goal Planner messages
       goalPlannerSuccessMessage: 'ستصل إلى ربحك الشهري المستهدف بعد الصدقة في {{months}} شهرًا.',
       goalPlannerFailureMessage: 'لم يتم الوصول إلى الهدف خلال 1000 شهر.',
+      // Tab descriptions
+      helpDesc: 'اكتشف الإرشادات والنصائح وإجابات الأسئلة الشائعة حول استخدام التطبيق.',
+      creditsDesc: 'شاهد الشكر ومعلومات المطور ونسب المصادر المفتوحة لهذا المشروع.',
       // ...add more as needed
     }
   }

@@ -132,18 +132,28 @@ const AppContent: React.FC = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-8">
           <div style={{ display: activeTab === 0 ? 'block' : 'none' }}>
+            <h3 className="text-xl font-semibold mb-2">{t('oneTimeInvestment')}</h3>
+            <p className="text-gray-600 mb-4">{t('oneTimeInvestmentDesc')}</p>
             <OneTimeInvestmentController />
           </div>
           <div style={{ display: activeTab === 1 ? 'block' : 'none' }}>
+            <h3 className="text-xl font-semibold mb-2">{t('goalPlanner')}</h3>
+            <p className="text-gray-600 mb-4">{t('goalPlannerDesc')}</p>
             <GoalPlannerController />
           </div>
           <div style={{ display: activeTab === 2 ? 'block' : 'none' }}>
+            <h3 className="text-xl font-semibold mb-2">{t('monthlyInvestment')}</h3>
+            <p className="text-gray-600 mb-4">{t('monthlyInvestmentDesc')}</p>
             <MonthlyInvestmentController />
           </div>
           <div style={{ display: activeTab === 3 ? 'block' : 'none' }}>
+            <h3 className="text-xl font-semibold mb-2">{t('help')}</h3>
+            <p className="text-gray-600 mb-4">{t('helpDesc')}</p>
             <HelpGuide />
           </div>
           <div style={{ display: activeTab === 4 ? 'block' : 'none' }}>
+            <h3 className="text-xl font-semibold mb-2">{t('credits')}</h3>
+            <p className="text-gray-600 mb-4">{t('creditsDesc')}</p>
             <CreditsView />
           </div>
         </div>
