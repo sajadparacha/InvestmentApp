@@ -52,6 +52,13 @@ const HelpGuide: React.FC = () => {
         </div>
       </div>
 
+      {/* App Description Section */}
+      <div className="card">
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('aboutApp')}</h3>
+        <p className="text-base text-gray-700 mb-2">{t('appDesc1')}</p>
+        <p className="text-base text-gray-700">{t('appDesc2')}</p>
+      </div>
+
       {/* Help Content */}
       <div className="space-y-6">
         <AccordionItem title={t('moduleDescriptions')} icon={<BookOpen className="w-5 h-5 text-primary-600" />}>

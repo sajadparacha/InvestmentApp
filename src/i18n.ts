@@ -4,6 +4,8 @@ import { initReactI18next } from 'react-i18next';
 const resources = {
   en: {
     translation: {
+      appDesc1: "This application is a user-friendly investment calculator designed to help you plan and analyze your financial goals. You can calculate returns for one-time investments, monthly recurring investments, and set specific profit goals using the Goal Planner. The app supports multiple languages and provides clear charts, tables, and summaries for easy understanding.",
+      appDesc2: "You can also export your results in CSV, Excel, or PDF formats for record-keeping or sharing. The app is accessible on any device, offers guidance and credits, and is ideal for anyone looking to make informed investment decisions with transparency and ease.",
       appTitle: 'Investment App',
       oneTimeInvestment: 'One-Time Investment',
       goalPlanner: 'Goal Planner',
@@ -129,11 +131,13 @@ const resources = {
       // Tab descriptions
       helpDesc: 'Find guidance, tips, and answers to common questions about using the app.',
       creditsDesc: 'See acknowledgments, developer info, and open source attributions for this project.',
-      // ...add more as needed
+      aboutApp: "About This Application",
     }
   },
   ur: {
     translation: {
+      appDesc1: "یہ ایپلیکیشن ایک آسان سرمایہ کاری کیلکولیٹر ہے جو آپ کو اپنے مالی اہداف کی منصوبہ بندی اور تجزیہ کرنے میں مدد دیتی ہے۔ آپ ایک بار کی سرمایہ کاری، ماہانہ سرمایہ کاری، اور مخصوص منافع کے اہداف کے لیے حساب لگا سکتے ہیں۔ ایپ میں مختلف زبانوں کی سہولت موجود ہے اور یہ چارٹس، ٹیبلز اور خلاصے کی صورت میں نتائج واضح طور پیش کرتی ہے۔",
+      appDesc2: "آپ اپنے نتائج کو CSV، ایکسل یا PDF فارمیٹ میں ایکسپورٹ بھی کر سکتے ہیں تاکہ انہیں محفوظ یا شیئر کیا جا سکے۔ یہ ایپ ہر ڈیوائس پر دستیاب ہے، رہنمائی اور کریڈٹس بھی فراہم کرتی ہے، اور شفافیت اور آسانی کے ساتھ سرمایہ کاری کے فیصلے کرنے والوں کے لیے بہترین ہے۔",
       appTitle: 'انویسٹمنٹ ایپ',
       oneTimeInvestment: 'ایک بار کی سرمایہ کاری',
       goalPlanner: 'اہداف منصوبہ ساز',
@@ -259,11 +263,13 @@ const resources = {
       // Tab descriptions
       helpDesc: 'ایپ کے استعمال کے بارے میں رہنمائی، تجاویز اور عام سوالات کے جوابات حاصل کریں۔',
       creditsDesc: 'اس پروجیکٹ کے لیے شکریہ، ڈویلپر کی معلومات، اور اوپن سورس انتسابات دیکھیں۔',
-      // ...add more as needed
+      aboutApp: "ایپلیکیشن کے بارے میں",
     }
   },
   ar: {
     translation: {
+      appDesc1: "هذا التطبيق هو آلة حاسبة استثمارية سهلة الاستخدام تساعدك في تخطيط وتحليل أهدافك المالية. يمكنك حساب العوائد للاستثمار لمرة واحدة، والاستثمار الشهري المتكرر، وتحديد أهداف ربح محددة باستخدام مخطط الأهداف. يدعم التطبيق عدة لغات ويعرض النتائج بوضوح من خلال الجداول والرسوم البيانية والملخصات.",
+      appDesc2: "يمكنك أيضًا تصدير نتائجك بصيغ CSV أو Excel أو PDF للاحتفاظ بها أو مشاركتها. التطبيق متاح على جميع الأجهزة، ويوفر إرشادات واعتمادات، وهو مثالي لأي شخص يرغب في اتخاذ قرارات استثمارية مدروسة بسهولة وشفافية.",
       appTitle: 'تطبيق الاستثمار',
       oneTimeInvestment: 'استثمار لمرة واحدة',
       goalPlanner: 'مخطط الأهداف',
@@ -392,7 +398,7 @@ const resources = {
       // Tab descriptions
       helpDesc: 'اكتشف الإرشادات والنصائح وإجابات الأسئلة الشائعة حول استخدام التطبيق.',
       creditsDesc: 'شاهد الشكر ومعلومات المطور ونسب المصادر المفتوحة لهذا المشروع.',
-      // ...add more as needed
+      aboutApp: "حول هذا التطبيق",
     }
   }
 };
