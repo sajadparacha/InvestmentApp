@@ -46,6 +46,7 @@ const resources = {
       capitalInvested: 'Capital Invested',
       langEnglish: 'English',
       langUrdu: 'Urdu',
+      langArabic: 'Arabic',
       investmentSummary: 'Investment Summary',
       monthlyInvestmentProfitCharity: 'Monthly Investment, Profit, and Charity',
       exportPNG: 'Export PNG',
