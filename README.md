@@ -143,4 +143,21 @@ For support, please open an issue in the GitHub repository or contact the develo
 
 ---
 
-**Built with ❤️ using React, TypeScript, and Tailwind CSS** 
+**Built with ❤️ using React, TypeScript, and Tailwind CSS**
+
+## Application Overview
+
+### English
+This application is a user-friendly investment calculator designed to help you plan and analyze your financial goals. You can calculate returns for one-time investments, monthly recurring investments, and set specific profit goals using the Goal Planner. The app supports multiple languages and provides clear charts, tables, and summaries for easy understanding.
+
+You can also export your results in CSV, Excel, or PDF formats for record-keeping or sharing. The app is accessible on any device, offers guidance and credits, and is ideal for anyone looking to make informed investment decisions with transparency and ease.
+
+### Urdu
+یہ ایپلیکیشن ایک آسان سرمایہ کاری کیلکولیٹر ہے جو آپ کو اپنے مالی اہداف کی منصوبہ بندی اور تجزیہ کرنے میں مدد دیتی ہے۔ آپ ایک بار کی سرمایہ کاری، ماہانہ سرمایہ کاری، اور مخصوص منافع کے اہداف کے لیے حساب لگا سکتے ہیں۔ ایپ میں مختلف زبانوں کی سہولت موجود ہے اور یہ چارٹس، ٹیبلز اور خلاصے کی صورت میں نتائج واضح طور پیش کرتی ہے۔
+
+آپ اپنے نتائج کو CSV، ایکسل یا PDF فارمیٹ میں ایکسپورٹ بھی کر سکتے ہیں تاکہ انہیں محفوظ یا شیئر کیا جا سکے۔ یہ ایپ ہر ڈیوائس پر دستیاب ہے، رہنمائی اور کریڈٹس بھی فراہم کرتی ہے، اور شفافیت اور آسانی کے ساتھ سرمایہ کاری کے فیصلے کرنے والوں کے لیے بہترین ہے۔
+
+### Arabic
+هذا التطبيق هو آلة حاسبة استثمارية سهلة الاستخدام تساعدك في تخطيط وتحليل أهدافك المالية. يمكنك حساب العوائد للاستثمار لمرة واحدة، والاستثمار الشهري المتكرر، وتحديد أهداف ربح محددة باستخدام مخطط الأهداف. يدعم التطبيق عدة لغات ويعرض النتائج بوضوح من خلال الجداول والرسوم البيانية والملخصات.
+
+يمكنك أيضًا تصدير نتائجك بصيغ CSV أو Excel أو PDF للاحتفاظ بها أو مشاركتها. التطبيق متاح على جميع الأجهزة، ويوفر إرشادات واعتمادات، وهو مثالي لأي شخص يرغب في اتخاذ قرارات استثمارية مدروسة بسهولة وشفافية. 
